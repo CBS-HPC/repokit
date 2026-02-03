@@ -5,7 +5,7 @@ import pathlib
 import shutil
 import shlex
 
-from .common import (
+from repokit_common import (
     PROJECT_ROOT,
     ensure_correct_kernel,
     load_from_env,
@@ -280,5 +280,6 @@ def main():
             remote_path=args.remote_path,
             recursive=recursive,
         )
+
 
 

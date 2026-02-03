@@ -9,7 +9,7 @@ import zipfile
 import requests
 
 from .ci import ci_config
-from .common import (
+from repokit_common import (
     PROJECT_ROOT,
     ensure_correct_kernel,
     exe_to_path,
@@ -432,3 +432,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

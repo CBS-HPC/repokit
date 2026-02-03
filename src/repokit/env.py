@@ -7,7 +7,7 @@ import sys
 import urllib.request
 import yaml
 
-from .common import PROJECT_ROOT, ask_yes_no, exe_to_path, install_uv, is_installed, save_to_env
+from repokit_common import PROJECT_ROOT, ask_yes_no, exe_to_path, install_uv, is_installed, save_to_env
 
 
 
@@ -659,3 +659,4 @@ def create_venv_env():
     save_to_env(str(env_path), "VENV_ENV_PATH")
 
     return str(env_path)
+

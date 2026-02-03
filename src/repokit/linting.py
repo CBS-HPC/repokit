@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from .common import (
+from repokit_common import (
     PROJECT_ROOT,
     load_from_env,
     make_safe_path,
@@ -61,3 +61,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

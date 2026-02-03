@@ -3,7 +3,7 @@ import os
 import pathlib
 import subprocess
 
-from .common import PROJECT_ROOT, ensure_correct_kernel, get_version, load_from_env
+from repokit_common import PROJECT_ROOT, ensure_correct_kernel, get_version, load_from_env
 from .templates.jinja import patch_jinja_templates, set_jinja_templates
 from .vcs import git_push
 
@@ -224,3 +224,4 @@ def ci_control():
 
 if __name__ == "__main__":
     ci_config()
+

@@ -16,7 +16,7 @@ else:
 import nbformat
 import yaml
 
-from .common import (
+from repokit_common import (
     PROJECT_ROOT,
     ensure_correct_kernel,
     load_from_env,
@@ -515,3 +515,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(lock_all_packages=args.lock_all_packages)
+
