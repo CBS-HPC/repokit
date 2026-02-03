@@ -32,9 +32,9 @@ dependencies = [
 requires-python = ">=3.12"
 
 [project.scripts]
-backup = "repokit.backup.cli:main"
+backup = "repokit_backup.cli:main"
 copy = "repokit.scp:main"
-set-dataset = "repokit.rdm.dataset:main"
+set-dataset = "repokit_dmp.dataset:main"
 update-dependencies = "repokit.deps:main"
 update-readme = "repokit.readme.template:main"
 reset-templates = "repokit.templates.code:main"
@@ -42,9 +42,9 @@ code-examples = "repokit.templates.example:main"
 test-examples = "repokit.templates.tests:main"
 git-config = "repokit.repos:main"
 ci-control = "repokit.ci:ci_control"
-dcas-migration = "repokit.rdm.dcas:main"
-dmp-update = "repokit.rdm.dmp:main"
-dmp-editor = "repokit.rdm.editor:cli"
+dcas-migration = "repokit_dmp.dcas:main"
+dmp-update = "repokit_dmp.dmp:main"
+dmp-editor = "repokit_dmp.editor:cli"
 code-linting = "repokit.linting:main"
 
 [project.optional-dependencies]
@@ -94,4 +94,5 @@ strict_optional = true
 check_untyped_defs = true
 ignore_missing_imports = false
 exclude = '(^\.venv/|^build/|^dist/|^tests?/data/|^notebooks/)'
+
 
