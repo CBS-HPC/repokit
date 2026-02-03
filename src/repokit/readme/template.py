@@ -18,7 +18,7 @@ from ..common import (
     toml_ignore,
     write_toml,
 )
-from ..rdm.dataset import dataset_to_readme, generate_dataset_table
+from repokit_dmp.dataset import dataset_to_readme, generate_dataset_table
 from .sections import main_text, read_dependencies
 
 

@@ -7,7 +7,18 @@ import sys
 import urllib.request
 import yaml
 
-from repokit_common import PROJECT_ROOT, ask_yes_no, exe_to_path, install_uv, is_installed, save_to_env
+# Allow loading repokit_common from the submodule path before installation.
+_EXT_COMMON = pathlib.Path(__file__).resolve().parents[2] / "external" / "repokit-common" / "src"
+if _EXT_COMMON.exists():
+    sys.path.insert(0, str(_EXT_COMMON))
+
+try:
+    from repokit_common import PROJECT_ROOT, ask_yes_no, exe_to_path, install_uv, is_installed, save_to_env
+except Exception as exc:
+    raise RuntimeError(
+        "repokit_common could not be imported. Ensure the submodule is "
+        "initialized or the package is installed."
+    ) from exc
 
 
 
