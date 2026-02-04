@@ -1,6 +1,6 @@
 import os
 
-from ..common import PROJECT_ROOT, ensure_correct_kernel, ext_map, language_dirs, load_from_env
+from repokit_common import PROJECT_ROOT, ensure_correct_kernel, ext_map, language_dirs, load_from_env
 from .jinja import set_jinja_templates, write_script
 
 template_env = set_jinja_templates("j2/code")

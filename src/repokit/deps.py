@@ -479,6 +479,7 @@ def update_code_dependency():
     else:
         print("not implemented yet")
 
+
 def _str2bool(v):
     if isinstance(v, bool):
         return v
@@ -488,6 +489,7 @@ def _str2bool(v):
     if s in {"0", "false", "f", "no", "n", "off"}:
         return False
     raise argparse.ArgumentTypeError("Expected a boolean value (true/false).")
+
 
 @ensure_correct_kernel
 def main(lock_all_packages: bool = False):

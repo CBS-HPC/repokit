@@ -9,7 +9,7 @@ import yaml
 from pathspec.patterns import GitWildMatchPattern
 
 
-from ..common import (
+from repokit_common import (
     PROJECT_ROOT,
     ext_map,
     language_dirs,

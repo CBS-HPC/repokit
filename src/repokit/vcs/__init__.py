@@ -6,7 +6,7 @@ import zipfile
 import glob
 import requests
 
-from ..common import (
+from repokit_common import (
     PROJECT_ROOT,
     change_dir,
     save_to_env,

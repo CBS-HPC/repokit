@@ -6,7 +6,7 @@ import sys
 import yaml
 
 from .git_w import git_commit
-from ..common import PROJECT_ROOT, is_installed, install_uv, _run, toml_dataset_path
+from repokit_common import PROJECT_ROOT, is_installed, install_uv, _run, toml_dataset_path
 
 
 DEFAULT_DATASET_PATH, _= toml_dataset_path()

@@ -4,7 +4,7 @@ import platform
 import subprocess
 import urllib.request
 
-from ..common import (
+from repokit_common import (
     PROJECT_ROOT,
     ask_yes_no,
     exe_to_path,

@@ -4,7 +4,7 @@ import pathlib
 import nbformat
 from jinja2 import Environment, FileSystemLoader
 
-from ..common import PROJECT_ROOT
+from repokit_common import PROJECT_ROOT
 
 
 def set_jinja_templates(template_folder: str):
