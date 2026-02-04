@@ -44,6 +44,7 @@ def setup_virtual_environment(
     cwd = pathlib.Path.cwd()
     if (cwd / "setup").exists() and (cwd / "pyproject.toml").exists():
         PROJECT_ROOT = cwd
+    os.chdir(PROJECT_ROOT)
 
     env_name = None
 
