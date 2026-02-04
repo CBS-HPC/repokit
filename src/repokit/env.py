@@ -20,6 +20,16 @@ except Exception as exc:
         "initialized or the package is installed."
     ) from exc
 
+# If repokit is vendored under a template's setup/repokit, prefer that project root.
+_here = pathlib.Path(__file__).resolve()
+if "setup" in _here.parts:
+    try:
+        _candidate = _here.parents[4]
+        if (_candidate / "setup").exists() and (_candidate / "pyproject.toml").exists():
+            PROJECT_ROOT = _candidate
+    except Exception:
+        pass
+
 
 
 def setup_virtual_environment(
