@@ -39,6 +39,12 @@ def setup_virtual_environment(
     - programming_language: str, 'python' or 'R' to specify the language for the environment.
     """
 
+    # Ensure PROJECT_ROOT points to the actual project root (not the repokit package path)
+    global PROJECT_ROOT
+    cwd = pathlib.Path.cwd()
+    if (cwd / "setup").exists() and (cwd / "pyproject.toml").exists():
+        PROJECT_ROOT = cwd
+
     env_name = None
 
     if python_env_manager.lower() == "conda" or r_env_manager.lower() == "conda":
