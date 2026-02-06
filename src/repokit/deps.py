@@ -500,7 +500,6 @@ def main(lock_all_packages: bool = False):
     update_env_files(lock_all_packages=lock_all_packages)
 
     # Run dependencies search
-    update_setup_dependency()
     update_code_dependency()
 
 
