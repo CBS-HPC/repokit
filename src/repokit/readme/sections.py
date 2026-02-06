@@ -620,13 +620,14 @@ conda env create -f environment.yml
 
 
 
-Once you have installed the python environmnet Conda, Pip or Uv, you must also install the local `repokit` package used for configuration and automation scripts:
+Once you have installed the python environment with Conda, pip, or uv, install the Repokit CLI from PyPI:
+
 
 
 
 ```
 
-uv pip install -e ./setup
+uv pip install repokit
 
 ```
 
@@ -636,7 +637,7 @@ or
 
 ```
 
-pip install -e ./setup
+pip install repokit
 
 ```
 
@@ -1156,7 +1157,7 @@ The Repokit toolchain is split into three command-line interfaces:
 
 > ℹ️ **Note**: CLI tools are installed in the active environment.  
 
-> Reinstall with: `uv pip install -e ./setup` or `pip install -e ./setup`
+> Reinstall with: `uv pip install repokit` or `pip install repokit`
 
 
 
