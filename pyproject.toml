@@ -32,6 +32,7 @@ dependencies = [
 requires-python = ">=3.12"
 
 [project.scripts]
+repokit = "repokit.cli:main"
 backup = "repokit_backup.cli:main"
 copy = "repokit.scp:main"
 set-dataset = "repokit_dmp.dataset:main"
@@ -94,5 +95,3 @@ strict_optional = true
 check_untyped_defs = true
 ignore_missing_imports = false
 exclude = '(^\.venv/|^build/|^dist/|^tests?/data/|^notebooks/)'
-
-

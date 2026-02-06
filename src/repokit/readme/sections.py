@@ -1,4 +1,4 @@
-import fnmatch
+﻿import fnmatch
 import os
 import pathlib
 import platform
@@ -79,26 +79,26 @@ def main_text(json_file, code_path):
     dataset_section = set_dataset()
 
     if programming_language.lower() != "python":
-        head = f"📋 Instructions for installing {py_version}, {software_version}, and dependencies"
+        head = f"ðŸ“‹ Instructions for installing {py_version}, {software_version}, and dependencies"
     else:
-        head = f"📋 Instructions for installing {software_version}, and dependencies"
+        head = f"ðŸ“‹ Instructions for installing {software_version}, and dependencies"
     header = f"""# {project_name}
 
 {project_description}
 
-## 👤 Author & Contact
+## ðŸ‘¤ Author & Contact
 
 {contact}
 
 <details>
-<summary><strong>🖥️ System Specifications </strong></summary><br>
+<summary><strong>ðŸ–¥ï¸ System Specifications </strong></summary><br>
 
 {system_spec}
 
 </details>
 
 <details>
-<summary><strong>🔧 Initial Setup</strong></summary><br>
+<summary><strong>ðŸ”§ Initial Setup</strong></summary><br>
 
 {head}
 
@@ -107,20 +107,20 @@ def main_text(json_file, code_path):
 </details>
 
 <details>
-<summary><strong>⚡Project Activation</strong></summary><br>
+<summary><strong>âš¡Project Activation</strong></summary><br>
 
-To configure the project's environment—including project paths, environment variables, and virtual environments—run the activation script for your operating system. These scripts read settings from the `.env` file.
+To configure the project's environmentâ€”including project paths, environment variables, and virtual environmentsâ€”run the activation script for your operating system. These scripts read settings from the `.env` file.
 
 {activate}
 
 </details>
 
 <details>
-<summary><strong>📜 Code Scripts</strong></summary><br>
+<summary><strong>ðŸ“œ Code Scripts</strong></summary><br>
 
 The project is written in **{software_version}** and includes modular scripts for standardized workflows, organized under `{code_path}`.
 
-##### ▶️ Run the Main Script
+##### â–¶ï¸ Run the Main Script
 
 To execute the full workflow pipeline, run the main orchestration script from the terminal:
 
@@ -137,42 +137,42 @@ To execute the full workflow pipeline, run the main orchestration script from th
 </details>
 
 <details>
-<summary><strong>🧪 Unit Testing</strong></summary><br>
+<summary><strong>ðŸ§ª Unit Testing</strong></summary><br>
 
 {unit_tests}
 
 </details>
 
 <details>
-<summary><strong>⚙️ Continuous Integration (CI)</strong></summary><br>
+<summary><strong>âš™ï¸ Continuous Integration (CI)</strong></summary><br>
 
 {ci_section}
 
 </details>
 
 <details>
-<summary><strong>🗂️ Configuration Files (Root-Level)</strong></summary><br>
+<summary><strong>ðŸ—‚ï¸ Configuration Files (Root-Level)</strong></summary><br>
 
 {config}
 
 </details>
 
 <details>
-<summary><strong>🧰 CLI Utilities</strong></summary><br>
+<summary><strong>ðŸ§° CLI Utilities</strong></summary><br>
 
 {cli_section}
 
 </details>
 
 <details>
-<summary><strong>📦 Dataset List</strong></summary><br>
+<summary><strong>ðŸ“¦ Dataset List</strong></summary><br>
 
 {dataset_section}
 
 </details>
 
 <details>
-<summary><strong>📁 Project Directory Structure</strong></summary><br>
+<summary><strong>ðŸ“ Project Directory Structure</strong></summary><br>
 
 The current repository structure is shown below. Descriptions can be edited in `./pyproject.toml`.
 
@@ -355,7 +355,7 @@ To install R packages required by this project, use the `renv` package within th
 cd R
 Rscript -e \"renv::restore()\"
 ```
-> ⚠️ Warning: Ensure you are using **{software_version}** for full compatibility. If `renv` is not already installed, run:
+> âš ï¸ Warning: Ensure you are using **{software_version}** for full compatibility. If `renv` is not already installed, run:
 
 ```
 install.packages("renv")
@@ -489,7 +489,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
         display = os.path.splitext(name)[0].replace("_", " ").title()
         desc = file_descriptions.get(name)
         if desc:
-            md.append(f"- **{display}** (`{name}`) — {desc}")
+            md.append(f"- **{display}** (`{name}`) â€” {desc}")
         else:
             md.append(f"- **{display}** (`{name}`)")
 
@@ -497,7 +497,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
 
     if any("utils" in os.path.basename(p).lower() for _, p in scripts):
         md.append(
-            "🛠️ **Note**: `utils` does not define a `main()` function and should not be executed directly.\n"
+            "ðŸ› ï¸ **Note**: `utils` does not define a `main()` function and should not be executed directly.\n"
         )
 
     orch_candidates = [
@@ -552,7 +552,7 @@ def set_config_table(programming_language, project_root="."):
 
 ---
 
-#### 📄 `pyproject.toml` Sections Explained
+#### ðŸ“„ `pyproject.toml` Sections Explained
 
 | Section                   | Purpose                                                                                      |
 |---------------------------|----------------------------------------------------------------------------------------------|
@@ -570,41 +570,63 @@ def set_config_table(programming_language, project_root="."):
 
 def _set_cli():
     cli_section = """
-The `repokit` Python package located in the `./setup` directory provides a collection of command-line tools to support project setup, dependency management, documentation, version control, and backup automation.
+The Repokit toolchain is split into three command-line interfaces:
 
-> ℹ️ **Note**: The CLI tools are automatically installed as part of the project environment.  
-> You can also manually install or reinstall them using:  
-> `uv pip install -e ./setup` or `pip install -e ./setup`
+- `repokit` for core project automation
+- `repokit-backup` for backup/sync workflows
+- `repokit-dmp` for data management plan workflows
 
-Once installed, the following commands are available from the terminal:
+> ℹ️ **Note**: CLI tools are installed in the active environment.  
+> Reinstall with: `uv pip install -e ./setup` or `pip install -e ./setup`
 
-| Command                  | Description                                                                 |
-|--------------------------|-----------------------------------------------------------------------------|
-| `backup`                 | Manages remote backup via `rclone` (add, push, pull, list, diff, delete).   |
-| `set-dataset`            | Initializes or registers datasets (e.g., add metadata, sync folders).       |
-| `update-dependencies`    | Retrieves and updates Python and R dependencies listed in `./setup/` and `./src/`. |
-| `update-readme`          | Regenerates the `README.md` from current project metadata and structure.    |
-| `reset-templates`        | Regenerates script templates based on selected language.                    |
-| `code-examples`          | Generates realistic example scripts and notebooks.                          |
-| `git-config`             | Applies Git configuration (e.g., user.name, user.email).                    |
-| `ci-control`             | Enables/disables Continuous Integration (CI) pipelines.                     |
-| `dcas-migration`          | Validates and migrates the project structure to DCAS (Data and Code Availability Standard) format. |
-| `dmp-update`          | Creates and updates `dmp.json` with meta-data from `pyproject.toml` or `cookiecutter.json` |
-| `dmp-editor`          | Launches a streamlit app to edit the `dmp.json` or publish datasets to Zenodo or Deic Dataverse |
-| `code-linting` | Runs language-aware linting: Python (Ruff + Mypy), R (lintr), MATLAB (checkcode). Executes per-language `linting.*` scripts if present. |
+### `repokit` (core)
 
-#### 🛠️ Usage
+| Command | Description |
+|---------|-------------|
+| `repokit copy` | Copies/synchronizes files based on configured project logic. |
+| `repokit deps-update` (`repokit deps`) | Updates dependency metadata for code/setup environments. |
+| `repokit readme-update` (`repokit readme`) | Regenerates `README.md` from project metadata/structure. |
+| `repokit templates-reset` (`repokit templates`) | Regenerates language script templates. |
+| `repokit examples-code` (`repokit ex-code`) | Generates code example scripts/notebooks. |
+| `repokit examples-test` (`repokit ex-test`) | Generates test examples. |
+| `repokit git-config` | Applies Git configuration helpers. |
+| `repokit ci-control` | Enables/disables CI configuration. |
+| `repokit lint` | Runs language-aware linting workflows. |
 
-After activating your environment (see [🚀 Project Activation](#-project-activation)), run any command directly:
+### `repokit-backup`
+
+| Command | Description |
+|---------|-------------|
+| `repokit-backup add` | Configure a backup remote and mapping. |
+| `repokit-backup push` | Push/sync project data to remote storage. |
+| `repokit-backup pull` | Restore/sync from remote to local project. |
+| `repokit-backup diff` | Show remote/local diff report. |
+| `repokit-backup list` | List configured remotes/mappings. |
+| `repokit-backup delete` | Remove a configured remote mapping. |
+| `repokit-backup transfer` | Transfer data between two remotes. |
+| `repokit-backup types` | List supported remote types. |
+
+### `repokit-dmp`
+
+| Command | Description |
+|---------|-------------|
+| `repokit-dmp dataset` | Initialize/update dataset metadata and structure links. |
+| `repokit-dmp update` | Create/update `dmp.json` from project metadata. |
+| `repokit-dmp editor` | Launch Streamlit editor for DMP and publishing helpers. |
+| `repokit-dmp dcas-migration` | Run DCAS migration/validation workflow. |
+
+#### Usage
+
+After activating your environment (see [Project Activation](#-project-activation)), run commands directly:
 
 ```bash
-backup push --remote erda
-update-dependencies
-set-dataset
-reset-templates
+repokit-backup push --remote erda
+repokit deps
+repokit-dmp dataset
+repokit templates
 ```
 
-A detailed description of each available CLI command — including usage, behavior, and example output — is provided [here](https://github.com/CBS-HPC/research-template?tab=readme-ov-file#cli-tools).
+A full CLI walkthrough is maintained in the project README section for CLI tools.
 
 """
     return cli_section
@@ -733,7 +755,7 @@ This template includes built-in support for **unit testing** in {programming_lan
 """.strip()
 
     if not folder_path.exists():
-        md += f"⚠️ Test folder not found: `{lang['test_folder']}`"
+        md += f"âš ï¸ Test folder not found: `{lang['test_folder']}`"
     else:
         # Filter test scripts based on naming convention
         test_pattern = lang["test_format"].replace("`", "")
@@ -742,7 +764,7 @@ This template includes built-in support for **unit testing** in {programming_lan
         ]
 
         if not test_scripts:
-            md += f"\n\n⚠️ No valid test scripts were detected in `{lang['test_folder']}`.\nMake sure test files follow the expected format: `{lang['test_format']}`"
+            md += f"\n\nâš ï¸ No valid test scripts were detected in `{lang['test_folder']}`.\nMake sure test files follow the expected format: `{lang['test_format']}`"
         else:
             md += f"\n\nThe following test scripts were detected in `{lang['test_folder']}`:\n"
             for name in test_scripts:
@@ -766,8 +788,8 @@ def _set_ci(programming_language: str, code_repo: str) -> str:
         "codeberg": {
             "supports": ["python", "r"],
             "config_file": ".woodpecker.yml",
-            "note": """⚠️ No support for MATLAB or cross-platform testing.  
-📝 CI is not enabled by default – to activate CI for your repository, you must [submit a request](https://codeberg.org/Codeberg-e.V./requests/issues/new?template=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml).  
+            "note": """âš ï¸ No support for MATLAB or cross-platform testing.  
+ðŸ“ CI is not enabled by default â€“ to activate CI for your repository, you must [submit a request](https://codeberg.org/Codeberg-e.V./requests/issues/new?template=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml).  
 More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
         },
     }
@@ -807,9 +829,9 @@ More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
 
 CI is configured for **{code_repo.capitalize()}** (`{ci["config_file"]}`) with **{programming_language.capitalize()}** support.
 
-✅ Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps — critical for collaboration and long-term reproducibility.
+âœ… Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps â€” critical for collaboration and long-term reproducibility.
 
-##### 🔄 CI Control via CLI
+##### ðŸ”„ CI Control via CLI
 
 CI can be toggled on or off using the built-in CLI command:
 
@@ -823,7 +845,7 @@ ci-control --off
 {ci["note"]}
 
 
-##### 🧷 Git Shortcut for Skipping CI
+##### ðŸ§· Git Shortcut for Skipping CI
 
 To skip CI on a commit, use the built-in Git alias:
 
@@ -1011,3 +1033,4 @@ def get_system_specs():
     section_text = format_specs(info)
 
     return section_text
+
