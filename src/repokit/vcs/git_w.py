@@ -238,7 +238,11 @@ def git_commit(msg: str = "", path: str | None = None, recursive: bool = True) -
             # Git: stage everything and commit
             subprocess.run(["git", "add", "-A"], check=True, cwd=path)
             try:
-                commit_cmd = ["git", "commit", "-m", msg] if msg else ["git", "commit", "--allow-empty", "-m", ""]
+                commit_cmd = (
+                    ["git", "commit", "-m", msg]
+                    if msg
+                    else ["git", "commit", "--allow-empty", "-m", ""]
+                )
                 subprocess.run(commit_cmd, check=True, cwd=path)
             except subprocess.CalledProcessError:
                 print("No Git changes to commit.")
@@ -307,7 +311,7 @@ def git_push(flag: str, msg: str = "", path: str = None):
                     print("Pushed all branches to origin.")
         else:
             print("No commit created — nothing to push.")
-            
+
             return True
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
@@ -329,5 +333,3 @@ def git_log_to_file(output_file_path):
         print(f"Git log has been saved to {output_file_path}")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
-
-

@@ -1,4 +1,3 @@
-
 import os
 import pathlib
 import subprocess
@@ -9,7 +8,7 @@ from .git_w import git_commit
 from repokit_common import PROJECT_ROOT, is_installed, install_uv, _run, toml_dataset_path
 
 
-DEFAULT_DATASET_PATH, _= toml_dataset_path()
+DEFAULT_DATASET_PATH, _ = toml_dataset_path()
 
 
 def install_dvc():
@@ -37,11 +36,11 @@ def install_dvc():
 
     # 1) Try uv-based install first (if uv is available/installed)
 
-    if install_uv() :
+    if install_uv():
         ok, _ = _run(
             "uv pip install dvc",
-            [sys.executable, "-m", "uv", "pip", "install", "dvc"]
-            #[sys.executable, "-m", "uv", "pip", "install", "dvc[all]"]
+            [sys.executable, "-m", "uv", "pip", "install", "dvc"],
+            # [sys.executable, "-m", "uv", "pip", "install", "dvc[all]"]
         )
         if ok and is_installed("dvc", "DVC"):
             print("DVC has been installed successfully via uv.")
@@ -52,10 +51,7 @@ def install_dvc():
         print("uv not available; trying pip fallback…")
 
     # 2) Fallback: regular pip install
-    ok, _ = _run(
-        "pip install dvc",
-        [sys.executable, "-m", "pip", "install", "dvc"]
-    )
+    ok, _ = _run("pip install dvc", [sys.executable, "-m", "pip", "install", "dvc"])
     if not ok or not is_installed("dvc", "DVC"):
         print("Error during DVC installation.")
         return False
@@ -87,10 +83,8 @@ def dvc_init(remote_storage, code_repo, repo_name):
     elif remote_storage == "Dropbox":
         print("Not implemented yet")
 
+    # subprocess.run(["dvc", "add", str(DEFAULT_DATASET_PATH['parent_path'])], check=True)
 
-    #subprocess.run(["dvc", "add", str(DEFAULT_DATASET_PATH['parent_path'])], check=True)
-    
-  
     _ = git_commit("Initial commit - Initialize DVC.")
     print("Created an initial commit.")
 
@@ -200,32 +194,32 @@ def set_dvc(f: str | os.PathLike | None = None) -> bool:
     if f is None:
         print("No path provided.")
         return False
-    
+
     root = pathlib.Path(PROJECT_ROOT).resolve()
     if not (root / ".dvc").exists():
         print("This is not a DVC project (missing .dvc). Skipping.")
         return False
-    
+
     p = (root / f).resolve()
     try:
         p.relative_to(root)
     except ValueError:
         print(f"Path is outside the project: {p}")
         return False
-    
+
     if not p.exists():
         print(f"Path does not exist: {p}")
         return False
-    
+
     # Compute repo-relative POSIX path (what DVC expects)
     rel = os.path.relpath(p, root).replace("\\", "/")
     rel_dvc = root / f"{rel}.dvc"
-    
+
     # --- Safeguard 1: exact path already added?
     if rel_dvc.exists():
         print(f"Already tracked by DVC: {rel}. (Found {rel}.dvc)")
         return True
-    
+
     # --- Safeguard 2: covered by a parent directory out?
     ancestor = pathlib.Path(rel)
     for parent in [ancestor] + list(ancestor.parents):
@@ -235,14 +229,11 @@ def set_dvc(f: str | os.PathLike | None = None) -> bool:
         if parent_dvc.exists():
             print(f"Already tracked by DVC via parent: {parent.as_posix()}.dvc")
             return True
-    
+
     # --- Safeguard 3: Check if .dvc file would be git-ignored
     try:
         result = subprocess.run(
-            ["git", "check-ignore", "-v", f"{rel}.dvc"],
-            cwd=root,
-            capture_output=True,
-            text=True
+            ["git", "check-ignore", "-v", f"{rel}.dvc"], cwd=root, capture_output=True, text=True
         )
         if result.returncode == 0:
             print(f"ERROR: {rel}.dvc would be git-ignored.")
@@ -250,28 +241,24 @@ def set_dvc(f: str | os.PathLike | None = None) -> bool:
             return False
     except Exception:
         pass
-    
+
     # Not tracked yet → dvc add
     try:
         result = subprocess.run(
-            ["dvc", "add", rel], 
-            cwd=root, 
-            check=True,
-            capture_output=True,
-            text=True
+            ["dvc", "add", rel], cwd=root, check=True, capture_output=True, text=True
         )
-        
+
         # Stage DVC/Git metadata; some may not exist — that's fine.
         to_stage = [f"{rel}.dvc"]
 
         subprocess.run(["git", "add", "--"] + to_stage, cwd=root, check=False)
-        
+
         # Make a commit (non-fatal if nothing staged for commit)
         subprocess.run(["git", "commit", "-m", f"Track with DVC: {rel}"], cwd=root, check=False)
-        
+
         print(f"DVC added: {rel}")
         return True
-    
+
     except subprocess.CalledProcessError as e:
         print(f"dvc add failed for {rel}:")
         if e.stdout:
@@ -279,7 +266,7 @@ def set_dvc(f: str | os.PathLike | None = None) -> bool:
         if e.stderr:
             print(f"STDERR: {e.stderr}")
         return False
-  
+
 
 def _load_dvc_file(p: pathlib.Path):
     """
@@ -287,7 +274,7 @@ def _load_dvc_file(p: pathlib.Path):
     Falls back to a simple parser if PyYAML isn't available.
     """
     txt = p.read_text(encoding="utf-8")
-    
+
     data = yaml.safe_load(txt) or {}
     outs = data.get("outs") or []
     paths = []
@@ -300,29 +287,27 @@ def _load_dvc_file(p: pathlib.Path):
 def dvc_cleaning(project_root: str | os.PathLike = ".") -> list[str]:
     """
     Remove stale DVC-tracked datasets whose workspace content was deleted manually.
-    
+
     Looks for *.dvc files (from `dvc add`) and, if *all* their declared outs are
     missing on disk, runs `dvc remove <file>.dvc` and commits the change.
-    
+
     Returns a list of repo-relative .dvc paths that were removed.
     """
 
-    
     root = pathlib.Path(project_root).resolve()
     if not (root / ".dvc").exists():
-        #print("Not a DVC project (missing .dvc).")
+        # print("Not a DVC project (missing .dvc).")
         return []
-    
+
     removed: list[str] = []
     # Filter out directories and dvc.yaml
-    dvc_files = [p for p in root.rglob("*.dvc") 
-                 if p.is_file() and p.name != "dvc.yaml"]
-    
+    dvc_files = [p for p in root.rglob("*.dvc") if p.is_file() and p.name != "dvc.yaml"]
+
     for dvcf in sorted(dvc_files):
         # repo-relative POSIX paths
         rel_dvc = os.path.relpath(dvcf, root).replace("\\", "/")
         outs = _load_dvc_file(dvcf)
-        
+
         if not outs:
             # Nothing to check; treat as stale tracker
             try:
@@ -331,7 +316,7 @@ def dvc_cleaning(project_root: str | os.PathLike = ".") -> list[str]:
                 continue
             except subprocess.CalledProcessError as e:
                 continue
-        
+
         # Check if all outs are missing
         all_missing = True
         for out in outs:
@@ -339,20 +324,29 @@ def dvc_cleaning(project_root: str | os.PathLike = ".") -> list[str]:
             if wp.exists():
                 all_missing = False
                 break
-        
+
         if all_missing:
             try:
                 _run(["dvc", "remove", rel_dvc], cwd=root, check=True)
                 removed.append(rel_dvc)
             except subprocess.CalledProcessError as e:
                 print(f"Failed to remove {rel_dvc}: {e}")
-    
+
     if removed:
         try:
             # Stage and commit cleanup; be tolerant if nothing to commit
             _run(["git", "add", "-A"], cwd=root, check=False)
-            _run(["git", "commit", "-m", f"Cleanup DVC: unregister {len(removed)} deleted dataset(s)"], cwd=root, check=False)
+            _run(
+                [
+                    "git",
+                    "commit",
+                    "-m",
+                    f"Cleanup DVC: unregister {len(removed)} deleted dataset(s)",
+                ],
+                cwd=root,
+                check=False,
+            )
         except Exception:
             pass
-    
+
     return removed

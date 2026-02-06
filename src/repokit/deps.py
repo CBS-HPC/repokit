@@ -27,7 +27,9 @@ from repokit_common import (
 from .env import export_conda_env
 
 
-def create_requirements_txt(requirements_file: str = "requirements.txt",lock_all_packages: bool = False):
+def create_requirements_txt(
+    requirements_file: str = "requirements.txt", lock_all_packages: bool = False
+):
     """
     Writes a cleaned 'pip freeze' to requirements.txt and ensures all *kept* packages
     are tracked in uv.lock (adds any missing with `uv add`).
@@ -52,7 +54,7 @@ def create_requirements_txt(requirements_file: str = "requirements.txt",lock_all
         # Keep these generic so they match widely.
     ]
     editable_re = re.compile(r"^\s*-e\s", re.IGNORECASE)
-    at_uri_re  = re.compile(r"\s@\s(?:file://|https?://|git\+)", re.IGNORECASE)
+    at_uri_re = re.compile(r"\s@\s(?:file://|https?://|git\+)", re.IGNORECASE)
 
     def should_skip_line(line: str) -> bool:
         l = line.strip()
@@ -67,8 +69,7 @@ def create_requirements_txt(requirements_file: str = "requirements.txt",lock_all
         return False
 
     # --- 1) pip freeze ---
-    result = subprocess.run([sys.executable, "-m", "pip", "freeze"],
-                            capture_output=True, text=True)
+    result = subprocess.run([sys.executable, "-m", "pip", "freeze"], capture_output=True, text=True)
     if result.returncode != 0:
         print("❌ Error running pip freeze:", result.stderr)
         return
@@ -80,9 +81,7 @@ def create_requirements_txt(requirements_file: str = "requirements.txt",lock_all
 
     # Package-name map (lower-cased) from filtered lines only
     installed_pkgs = {
-        ln.split("==", 1)[0].strip().lower(): ln
-        for ln in filtered_lines
-        if "==" in ln
+        ln.split("==", 1)[0].strip().lower(): ln for ln in filtered_lines if "==" in ln
     }
 
     # --- 3) Write requirements.txt from filtered lines ---
@@ -129,8 +128,10 @@ def create_conda_environment_yml(
     r_version: str | None = None,
     requirements_file: str = "requirements.txt",
     output_file: str = "environment.yml",
-    channels: tuple[str, ...] = ("conda-forge",),   # explicit channels; add "nodefaults" to block Anaconda defaults
-    pin_python_patch: bool = False,                 # False -> "3.12", True -> "3.12.3"
+    channels: tuple[str, ...] = (
+        "conda-forge",
+    ),  # explicit channels; add "nodefaults" to block Anaconda defaults
+    pin_python_patch: bool = False,  # False -> "3.12", True -> "3.12.3"
 ):
     """
     Build environment.yml from a pip requirements.txt, current Python, and optional R.
@@ -438,7 +439,9 @@ def update_env_files(lock_all_packages: bool = False):
     programming_language = load_from_env("PROGRAMMING_LANGUAGE", ".cookiecutter")
     python_env_manager = load_from_env("PYTHON_ENV_MANAGER", ".cookiecutter")
     repo_name = load_from_env("REPO_NAME", ".cookiecutter")
-    create_requirements_txt(requirements_file="requirements.txt",lock_all_packages=lock_all_packages)
+    create_requirements_txt(
+        requirements_file="requirements.txt", lock_all_packages=lock_all_packages
+    )
     if python_env_manager.lower() == "venv":
         create_conda_environment_yml(
             repo_name,
@@ -504,16 +507,17 @@ def main(lock_all_packages: bool = False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Update environment files and dependency metadata.")
+    parser = argparse.ArgumentParser(
+        description="Update environment files and dependency metadata."
+    )
     parser.add_argument(
         "--lock_all_packages",
         type=_str2bool,
         nargs="?",
-        const=True,            # allows just --lock_all_packages to mean True
+        const=True,  # allows just --lock_all_packages to mean True
         default=False,
         help="Lock all package versions in the generated files (default: False). "
-             "Accepts true/false, yes/no, 1/0."
+        "Accepts true/false, yes/no, 1/0.",
     )
     args = parser.parse_args()
     main(lock_all_packages=args.lock_all_packages)
-

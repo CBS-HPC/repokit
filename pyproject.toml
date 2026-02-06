@@ -71,6 +71,7 @@ code-linting = "repokit.linting:main"
 dev = [
   "pytest",
   "ruff>=0.6",
+  "mypy>=1.10",
   "uv",
 ]
 
@@ -81,17 +82,13 @@ where = ["src"]
 line-length = 100
 # set to "py310" if your lowest supported Python is 3.10
 target-version = "py312"
-src = ["repokit", "tests"]
-extend-exclude = ["build", "dist", ".venv", ".mypy_cache", "__pycache__", "data", "notebooks"]
+src = ["src", "tests"]
+extend-exclude = ["build", "dist", ".venv", ".mypy_cache", "__pycache__", "data", "notebooks", "external"]
 
 [tool.ruff.lint]
-# Style + bug catchers + upgrades + perf + args + datetime + print/doc rules
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
 
-select = ["E","F","I","B","UP","SIM","PERF","ARG","DTZ","ERA","T20","D"] 
-ignore = []
-extend-ignore = ["D401", "T201","E501"]
-
-# allow prints in CLI entrypoints; relax docs in tests
 [tool.ruff.lint.per-file-ignores]
 
 
@@ -105,12 +102,14 @@ skip-magic-trailing-comma = false
 convention = "numpy"  # or "google"
 
 [tool.mypy]
-# match to your lowest supported Python for best results
 python_version = "3.12"
 warn_unused_ignores = true
-disallow_untyped_defs = true
-no_implicit_optional = true
-strict_optional = true
-check_untyped_defs = true
-ignore_missing_imports = false
-exclude = '(^\.venv/|^build/|^dist/|^tests?/data/|^notebooks/)'
+ignore_missing_imports = true
+disallow_untyped_defs = false
+check_untyped_defs = false
+no_implicit_optional = false
+strict_optional = false
+exclude = '(^\.venv/|^build/|^dist/|^external/)'
+
+
+

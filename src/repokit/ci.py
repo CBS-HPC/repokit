@@ -224,4 +224,3 @@ def ci_control():
 
 if __name__ == "__main__":
     ci_config()
-

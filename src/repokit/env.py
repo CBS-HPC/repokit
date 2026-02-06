@@ -13,13 +13,19 @@ if _EXT_COMMON.exists():
     sys.path.insert(0, str(_EXT_COMMON))
 
 try:
-    from repokit_common import PROJECT_ROOT, ask_yes_no, exe_to_path, install_uv, is_installed, save_to_env
+    from repokit_common import (
+        PROJECT_ROOT,
+        ask_yes_no,
+        exe_to_path,
+        install_uv,
+        is_installed,
+        save_to_env,
+    )
 except Exception as exc:
     raise RuntimeError(
         "repokit_common could not be imported. Ensure the submodule is "
         "initialized or the package is installed."
     ) from exc
-
 
 
 def setup_virtual_environment(
@@ -126,15 +132,13 @@ def setup_conda(
     conda_r_version: str = None,
     conda_python_version: str = None,
 ):
-
     if not is_installed("conda", "Conda"):
-
         install_path = str(PROJECT_ROOT / pathlib.Path("./bin/miniforge3"))
         install_path = os.path.abspath(install_path)
 
         if not install_miniforge(install_path):
             return False
-            
+
     # Get the absolute path to the environment
     env_path = str(PROJECT_ROOT / pathlib.Path("./.conda"))
 
@@ -209,7 +213,7 @@ def set_conda_packages(
     return install_packages
 
 
-def export_conda_env(env_path:str=None, output_file:str="environment.yml"):
+def export_conda_env(env_path: str = None, output_file: str = "environment.yml"):
     """
     Export the details of a conda environment to a YAML file using its path.
 
@@ -223,7 +227,7 @@ def export_conda_env(env_path:str=None, output_file:str="environment.yml"):
         env_path = str(PROJECT_ROOT / pathlib.Path("./.conda"))
 
     env_path = os.path.abspath(env_path)
-    
+
     output_file = os.path.abspath(output_file)
 
     def update_conda_env_file(file_path):
@@ -267,8 +271,28 @@ def tos_conda():
     """
 
     try:
-        subprocess.run(["conda", "tos", "accept", "--override-channels", "--channel", "https://repo.anaconda.com/pkgs/main"], check=True)
-        subprocess.run(["conda", "tos", "accept", "--override-channels", "--channel", "https://repo.anaconda.com/pkgs/r"], check=True)
+        subprocess.run(
+            [
+                "conda",
+                "tos",
+                "accept",
+                "--override-channels",
+                "--channel",
+                "https://repo.anaconda.com/pkgs/main",
+            ],
+            check=True,
+        )
+        subprocess.run(
+            [
+                "conda",
+                "tos",
+                "accept",
+                "--override-channels",
+                "--channel",
+                "https://repo.anaconda.com/pkgs/r",
+            ],
+            check=True,
+        )
         print("""To accept these channels' Terms of Service, run the following commands:
     conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
     conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs
@@ -440,9 +464,7 @@ def install_miniforge(install_path):
             shutil.rmtree(install_path_win)
 
         # NSIS: /S (silent) and /D=... must be LAST and unquoted
-        install_command = (
-            f'"{installer_path}" /S /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /D={install_path_win}'
-        )
+        install_command = f'"{installer_path}" /S /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /D={install_path_win}'
 
     elif os_type == "darwin":
         # macOS: choose arm64 on Apple Silicon, otherwise x86_64
@@ -640,6 +662,7 @@ def update_env_yaml(
 
 # Venv and Virtualenv Functions
 
+
 def create_venv_env():
     """
     Create a Python virtual environment using uv if available; otherwise, use venv.
@@ -677,4 +700,3 @@ def create_venv_env():
     save_to_env(str(env_path), "VENV_ENV_PATH")
 
     return str(env_path)
-

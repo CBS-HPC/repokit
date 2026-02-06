@@ -17,7 +17,7 @@ from repokit_common import (
     load_from_env,
     save_to_env,
     repo_user_info,
-    prompt_user
+    prompt_user,
 )
 from .vcs import setup_version_control
 from .readme.template import create_citation_file
@@ -207,15 +207,15 @@ def repo_create(code_repo, repo_name, project_description, version_control):
         else:
             subprocess.run(["git", "remote", "set-url", "origin", remote_url], check=True)
 
-
-
         # If using DataLad, add a sibling and push via DataLad
         if version_control.lower() == "datalad":
             # Register the Git host as a DataLad sibling
             # (idempotent: won't fail if already there)
-            #subprocess.run(["datalad", "siblings", "add", "-s", "origin", "--url", remote_url], check=False)
-            subprocess.run(["datalad", "siblings", "configure", "-s", "origin", "--url", remote_url], check=False)
-
+            # subprocess.run(["datalad", "siblings", "add", "-s", "origin", "--url", remote_url], check=False)
+            subprocess.run(
+                ["datalad", "siblings", "configure", "-s", "origin", "--url", remote_url],
+                check=False,
+            )
 
             # Push Git history (and recursively subdatasets if any)
             subprocess.check_call(["datalad", "push", "--to", "origin", "-r"])
@@ -395,22 +395,20 @@ def main():
 
     if version_control == "None":
         version_control = prompt_user(
-            "Choose a version control:",
-            ["Git", "Datalad", "DVC", "None"]
+            "Choose a version control:", ["Git", "Datalad", "DVC", "None"]
         )
         save_to_env(code_repo, "VERSION_CONTROL", ".cookiecutter")
 
-    if version_control=="None":
+    if version_control == "None":
         return
 
     if code_repo == "None":
         code_repo = prompt_user(
-            "Choose a code repository host:",
-            ["GitHub", "GitLab", "Codeberg", "None"]
+            "Choose a code repository host:", ["GitHub", "GitLab", "Codeberg", "None"]
         )
 
         save_to_env(code_repo, "CODE_REPO", ".cookiecutter")
- 
+
     repo_name = load_from_env("REPO_NAME", ".cookiecutter")
     project_description = load_from_env("PROJECT_DESCRIPTION", ".cookiecutter")
     remote_storage = load_from_env("REMOTE_STORAGE", ".cookiecutter")
@@ -432,4 +430,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

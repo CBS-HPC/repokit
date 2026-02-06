@@ -22,7 +22,7 @@ from .git_w import (
     check_git_config,
     setup_git_config,
     git_commit,
-    git_push
+    git_push,
 )
 from .datalad_w import (
     install_git_annex,
@@ -34,17 +34,11 @@ from .datalad_w import (
     set_datalad,
     datalad_cleaning,
 )
-from .dvc_w import (
-    install_dvc,
-    dvc_init,
-    dvc_deic_storage,
-    dvc_local_storage,
-    set_dvc,
-    dvc_cleaning
-)
+from .dvc_w import install_dvc, dvc_init, dvc_deic_storage, dvc_local_storage, set_dvc, dvc_cleaning
 
 
-DEFAULT_DATASET_PATH, _= toml_dataset_path()
+DEFAULT_DATASET_PATH, _ = toml_dataset_path()
+
 
 # Setup functions
 def setup_version_control(version_control, remote_storage, code_repo, repo_name):
@@ -67,15 +61,16 @@ def setup_git(version_control, code_repo):
         if not flag:
             flag, git_name, git_email = setup_git_config(version_control, git_name, git_email)
 
-        if flag and version_control.lower() in ["git","datalad","dvc"]: 
-            
+        if flag and version_control.lower() in ["git", "datalad", "dvc"]:
             default_branch = "main" if code_repo.lower() in ["github", "codeberg"] else "master"
-            
+
             flag = git_init(msg="Initial commit", branch_name=default_branch)
             # Creating its own git repo for "data"
             if version_control.lower() == "git" and flag:
-                with change_dir(str(DEFAULT_DATASET_PATH['parent_path'])):    
-                    flag = git_init(msg="Initial commit - /data git repo", branch_name="data", path=os.getcwd())
+                with change_dir(str(DEFAULT_DATASET_PATH["parent_path"])):
+                    flag = git_init(
+                        msg="Initial commit - /data git repo", branch_name="data", path=os.getcwd()
+                    )
                     git_log_to_file(os.path.join(".gitlog"))
         if flag:
             save_to_env(git_name, "GIT_USER")
@@ -94,15 +89,16 @@ def setup_dvc(version_control, remote_storage, code_repo, repo_name):
     # Install datalad
     if not install_dvc():
         return
-    
- 
+
     # deactivate data/ in .gitignore
     gitignore = pathlib.Path(PROJECT_ROOT / ".gitignore")
     if gitignore.exists():
         lines = gitignore.read_text().splitlines()
-        new_lines = [line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines]
+        new_lines = [
+            line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines
+        ]
         gitignore.write_text("\n".join(new_lines) + "\n")
-    
+
     dvc_init(remote_storage, code_repo, repo_name)
 
 
@@ -125,7 +121,9 @@ def setup_datalad(version_control, remote_storage, code_repo, repo_name):
     gitignore = pathlib.Path(PROJECT_ROOT / ".gitignore")
     if gitignore.exists():
         lines = gitignore.read_text().splitlines()
-        new_lines = [line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines]
+        new_lines = [
+            line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines
+        ]
         gitignore.write_text("\n".join(new_lines) + "\n")
 
     # Create datalad dataset
@@ -206,7 +204,7 @@ def rclone_commit(local_path: str, flag: bool = False, msg: str = "Rclone Backup
     if not flag and (pathlib.Path(local_path).resolve() == PROJECT_ROOT.resolve()):
         flag = True
         if os.path.exists(".git") and not os.path.exists(".datalad") and not os.path.exists(".dvc"):
-            with change_dir(str(DEFAULT_DATASET_PATH['parent_path'])):
+            with change_dir(str(DEFAULT_DATASET_PATH["parent_path"])):
                 _ = git_commit(msg=msg, path=os.getcwd())
                 git_log_to_file(os.path.join(".gitlog"))
             git_push(load_from_env("CODE_REPO", ".cookiecutter") != "None", msg)
@@ -220,8 +218,6 @@ __all__ = [
     "setup_git",
     "setup_dvc",
     "setup_datalad",
-
-    
     # Git functions
     "install_git",
     "git_init",
@@ -231,7 +227,6 @@ __all__ = [
     "git_commit",
     "git_push",
     "rclone_commit",
-    
     # DataLad functions
     "install_git_annex",
     "install_datalad",
@@ -241,8 +236,6 @@ __all__ = [
     "install_git_annex_remote_rclone",
     "set_datalad",
     "datalad_cleaning",
-
-    
     # DVC functions
     "install_dvc",
     "dvc_init",

@@ -5,14 +5,21 @@ import subprocess
 import sys
 import re
 
-from repokit_common import PROJECT_ROOT, exe_to_path, is_installed, install_uv, _run, toml_dataset_path
+from repokit_common import (
+    PROJECT_ROOT,
+    exe_to_path,
+    is_installed,
+    install_uv,
+    _run,
+    toml_dataset_path,
+)
 
-DEFAULT_DATASET_PATH, _= toml_dataset_path()
+DEFAULT_DATASET_PATH, _ = toml_dataset_path()
 
-def _uv_installer(package_name:str = None):
-    
+
+def _uv_installer(package_name: str = None):
     if not package_name:
-            return False
+        return False
     if not install_uv():
         return False
     try:
@@ -56,7 +63,6 @@ def install_datalad():
             return False
 
     if not is_installed("datalad", "Datalad"):
-
         if not _uv_installer(package_name="datalad"):
             return _pip_installer()
 
@@ -73,14 +79,14 @@ def install_git_annex():
         str: The installation path of git-annex if installed successfully.
         None: If the installation fails.
     """
+
     def _is_windows():
         return os.name == "nt"  # or: sys.platform.startswith("win")
-    
+
     def _windows_installer():
-        
         if not _is_windows():
             return False
-          
+
         try:
             # Ensure datalad-installer is available
             if not shutil.which("datalad-installer"):
@@ -131,7 +137,7 @@ def install_git_annex():
 
         if not installed:
             return False
-        
+
     # Configure git to use the git-annex filter process
     try:
         subprocess.check_call(
@@ -145,14 +151,12 @@ def install_git_annex():
 
 
 def install_git_annex_remote_rclone(install_path):
-    
     def clone_git_annex_remote_rclone(install_path):
         """Clone the git-annex-remote-rclone repository to the specified bin folder."""
         repo_url = "https://github.com/git-annex-remote-rclone/git-annex-remote-rclone.git"
         repo_name = os.path.basename(repo_url).replace(".git", "")
-        #repo_path = os.path.join(install_path, repo_name)
+        # repo_path = os.path.join(install_path, repo_name)
         repo_path = str(pathlib.Path(install_path) / pathlib.Path(repo_name))
-
 
         # Create the bin folder if it doesn't exist
         install_path = str(PROJECT_ROOT / pathlib.Path(install_path))
@@ -186,8 +190,8 @@ def datalad_create():
     def write_gitattributes():
         # Last matching rule wins; keep 'data/**' AFTER '*' to override it.
         lines = [
-            "* annex.largefiles=nothing\n",       # default: don't annex (i.e., unlocked)
-           # "data/** annex.largefiles=anything\n" # but annex everything under ./data
+            "* annex.largefiles=nothing\n",  # default: don't annex (i.e., unlocked)
+            # "data/** annex.largefiles=anything\n" # but annex everything under ./data
         ]
         # Write idempotently (avoid duplicate lines, preserve other attrs if any)
         existing = gitattributes.read_text().splitlines(True) if gitattributes.exists() else []
@@ -208,19 +212,26 @@ def datalad_create():
     write_gitattributes()
 
     # Save the state
-    subprocess.run(["datalad", "save", "-m", f"Configure annex: unlock everything except {str(DEFAULT_DATASET_PATH['parent_path'])}"], check=True)
+    subprocess.run(
+        [
+            "datalad",
+            "save",
+            "-m",
+            f"Configure annex: unlock everything except {str(DEFAULT_DATASET_PATH['parent_path'])}",
+        ],
+        check=True,
+    )
     print(f"DataLad dataset ready: unlocked all except {str(DEFAULT_DATASET_PATH['parent_path'])}")
 
 
 def datalad_deic_storage(repo_name):
-    
     def git_annex_remote(remote_name, target, prefix):
         """
         Creates a git annex remote configuration for 'deic-storage' using rclone.
         """
-        #remote_name = "deic-storage"
-        #target = "dropbox-for-friends"  # Change this to your actual target as needed
-        #prefix = "my_awesome_dataset"  # Change this to your desired prefix
+        # remote_name = "deic-storage"
+        # target = "dropbox-for-friends"  # Change this to your actual target as needed
+        # prefix = "my_awesome_dataset"  # Change this to your desired prefix
 
         # Construct the command
         command = [
@@ -324,8 +335,15 @@ def _is_registered_subdataset(root: pathlib.Path, rel_posix: str, abs_path: path
     """Return True if rel_posix is a registered subdataset of root."""
     # Prefer DataLad (accurate)
     try:
-        out = _run(["datalad", "subdatasets", "--recursive", "--result-renderer", "json"],
-                   cwd=root, check=False, capture=True).stdout or ""
+        out = (
+            _run(
+                ["datalad", "subdatasets", "--recursive", "--result-renderer", "json"],
+                cwd=root,
+                check=False,
+                capture=True,
+            ).stdout
+            or ""
+        )
         abs_posix = abs_path.as_posix()
         if any(f'"path": "{abs_posix}"' in line for line in out.splitlines()):
             return True
@@ -334,8 +352,15 @@ def _is_registered_subdataset(root: pathlib.Path, rel_posix: str, abs_path: path
     # Fallback: check .gitmodules listing
     gm = root / ".gitmodules"
     if gm.exists():
-        out = _run(["git", "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.path$"],
-                   cwd=root, check=False, capture=True).stdout or ""
+        out = (
+            _run(
+                ["git", "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.path$"],
+                cwd=root,
+                check=False,
+                capture=True,
+            ).stdout
+            or ""
+        )
         for line in out.splitlines():
             try:
                 _key, path = line.split(None, 1)
@@ -365,7 +390,7 @@ def _ensure_attr_for_path(root: pathlib.Path, rel_posix: str, is_dir: bool) -> b
 
     # Quote if contains whitespace
     if any(ch.isspace() for ch in pattern):
-        pattern_fmt = f"\"{pattern}\""
+        pattern_fmt = f'"{pattern}"'
     else:
         pattern_fmt = pattern
 
@@ -398,7 +423,7 @@ def _ensure_attr_for_path(root: pathlib.Path, rel_posix: str, is_dir: bool) -> b
         if tokens:
             first = tokens[0]
             # acceptable prior "first token" variants for the same target
-            same_target = first in {pattern, f"\"{pattern}\""}
+            same_target = first in {pattern, f'"{pattern}"'}
             if same_target and any(tok.startswith("annex.largefiles=") for tok in tokens[1:]):
                 changed = True
                 continue
@@ -445,17 +470,21 @@ def set_datalad(path: str | os.PathLike) -> bool:
         _run(["git", "add", "--", ".gitattributes"], cwd=root, check=False)
 
     # Stage the path itself (files or directory)
-    #_run(["git", "add", "--", rel_posix], cwd=root, check=False)
+    # _run(["git", "add", "--", rel_posix], cwd=root, check=False)
     _run(["git", "-c", "core.safecrlf=false", "add", "--", rel_posix], cwd=root, check=False)
 
     # Save (non-fatal if nothing to save)
-    _run(["datalad", "save", "-m", f"Track in superdataset: {rel_posix}", rel_posix],
-         cwd=root, check=False)
+    _run(
+        ["datalad", "save", "-m", f"Track in superdataset: {rel_posix}", rel_posix],
+        cwd=root,
+        check=False,
+    )
 
     return changed
 
 
 GLOB_META = set("*?[")
+
 
 def _first_token(line: str) -> str | None:
     s = line.strip()
@@ -496,7 +525,7 @@ def clean_gitattributes(project_root: pathlib.Path) -> int:
     """Remove .gitattributes lines whose pathspecs no longer exist."""
     ga = project_root / ".gitattributes"
     if not ga.exists():
-        #print("[.gitattributes] not found — nothing to clean.")
+        # print("[.gitattributes] not found — nothing to clean.")
         return 0
 
     original = ga.read_text(encoding="utf-8").splitlines(True)
@@ -536,8 +565,12 @@ def _list_absent_submodules_via_gitmodules(project_root: pathlib.Path) -> list[s
     if not gm.exists():
         return []
     # Parse all submodule.<name>.path entries
-    out = _run(["git", "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.path$"],
-               cwd=project_root, check=False, capture=True)
+    out = _run(
+        ["git", "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.path$"],
+        cwd=project_root,
+        check=False,
+        capture=True,
+    )
     absent = []
     for line in (out.stdout or "").splitlines():
         # line like: submodule.data/raw/ds1.path data/raw/ds1
@@ -557,11 +590,15 @@ def _git_unregister_submodule(project_root: pathlib.Path, rel_path: str) -> None
     Keeps worktree if present; removes gitlink and .gitmodules section.
     """
     # Remove gitlink from index (dir can be missing)
-    _run(["git", "rm", "--cached", "-r", "--ignore-unmatch", rel_path],
-         cwd=project_root, check=False)
+    _run(
+        ["git", "rm", "--cached", "-r", "--ignore-unmatch", rel_path], cwd=project_root, check=False
+    )
     # Remove .gitmodules section if present
-    _run(["git", "config", "-f", ".gitmodules", "--remove-section", f"submodule.{rel_path}"],
-         cwd=project_root, check=False)
+    _run(
+        ["git", "config", "-f", ".gitmodules", "--remove-section", f"submodule.{rel_path}"],
+        cwd=project_root,
+        check=False,
+    )
     # Stage .gitmodules change if it exists
     if (project_root / ".gitmodules").exists():
         _run(["git", "add", ".gitmodules"], cwd=project_root, check=False)
@@ -578,8 +615,18 @@ def clean_subdatasets(project_root: pathlib.Path) -> list[str]:
     if is_installed("datalad"):
         # Ask DataLad for subdatasets that are absent on disk
         res = _run(
-            ["datalad", "subdatasets", "--state", "absent", "--recursive", "--result-renderer", "json"],
-            cwd=project_root, check=False, capture=True
+            [
+                "datalad",
+                "subdatasets",
+                "--state",
+                "absent",
+                "--recursive",
+                "--result-renderer",
+                "json",
+            ],
+            cwd=project_root,
+            check=False,
+            capture=True,
         )
         missing: list[str] = []
         for line in (res.stdout or "").splitlines():
@@ -596,11 +643,17 @@ def clean_subdatasets(project_root: pathlib.Path) -> list[str]:
         for rel in missing:
             try:
                 # Unregister gitlink; directory may be gone → use --nocheck
-                _run(["datalad", "remove", "-d", ".", "-r", "--nocheck", rel],
-                     cwd=project_root, check=True)
+                _run(
+                    ["datalad", "remove", "-d", ".", "-r", "--nocheck", rel],
+                    cwd=project_root,
+                    check=True,
+                )
                 # Record change in superdataset
-                _run(["datalad", "save", "-m", f"Unregister removed subdataset {rel}", rel],
-                     cwd=project_root, check=False)
+                _run(
+                    ["datalad", "save", "-m", f"Unregister removed subdataset {rel}", rel],
+                    cwd=project_root,
+                    check=False,
+                )
                 cleaned.append(rel)
             except subprocess.CalledProcessError:
                 # Fall back to plain git if remove failed
@@ -615,7 +668,11 @@ def clean_subdatasets(project_root: pathlib.Path) -> list[str]:
     if cleaned:
         # Final commit/save using Git (works w/ or w/o datalad)
         try:
-            _run(["git", "commit", "-m", f"Unregister {len(cleaned)} removed subdataset(s)"], cwd=project_root, check=False)
+            _run(
+                ["git", "commit", "-m", f"Unregister {len(cleaned)} removed subdataset(s)"],
+                cwd=project_root,
+                check=False,
+            )
         except Exception:
             pass
 
@@ -629,5 +686,3 @@ def datalad_cleaning(project_root: str | pathlib.Path = ".") -> None:
 
     _ = clean_gitattributes(root)
     _ = clean_subdatasets(root)
-
-

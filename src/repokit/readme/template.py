@@ -129,7 +129,7 @@ def creating_readme(programming_language="None"):
         tool_name="file_descriptions",
         toml_path="pyproject.toml",
     )
-    markdown_table, _ = generate_dataset_table(dmp_json , file_descriptions)
+    markdown_table, _ = generate_dataset_table(dmp_json, file_descriptions)
 
     if markdown_table:
         dataset_to_readme(markdown_table)
@@ -141,13 +141,12 @@ def creating_readme(programming_language="None"):
         toml_key="patterns",
     )
 
-   
-    dataset_list = datasets_ignore(datasets_json=dmp_json,base=str(PROJECT_ROOT))
+    dataset_list = datasets_ignore(datasets_json=dmp_json, base=str(PROJECT_ROOT))
 
     if dataset_list:
         ignore_list = merge_pathspecs(ignore_list, dataset_list)
 
-    create_tree(readme_file, ignore_list, file_descriptions,str(PROJECT_ROOT))
+    create_tree(readme_file, ignore_list, file_descriptions, str(PROJECT_ROOT))
 
 
 def generate_readme(

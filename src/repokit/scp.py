@@ -13,6 +13,7 @@ from repokit_common import (
 
 from .backup import set_host_port, _ensure_repo_suffix
 
+
 def scp_push(
     remote_name: str,
     local_path: str = None,
@@ -34,7 +35,9 @@ def scp_push(
     # If remote_path not provided, prompt; otherwise use as-is
     if remote_path is None:
         default_base = f"work/rclone-backup/{repo_name}"
-        remote_path = (input(f"Enter base folder for {remote_name} [{default_base}]: ").strip() or default_base)
+        remote_path = (
+            input(f"Enter base folder for {remote_name} [{default_base}]: ").strip() or default_base
+        )
     remote_path = _ensure_repo_suffix(remote_path, repo_name)
 
     # Normalize local path
@@ -62,7 +65,11 @@ def scp_push(
 
     def _ssh_remote(cmd: list[str], *, capture: bool = True):
         return subprocess.run(
-            cmd, check=False, capture_output=capture, text=True, timeout=DEFAULT_TIMEOUT,
+            cmd,
+            check=False,
+            capture_output=capture,
+            text=True,
+            timeout=DEFAULT_TIMEOUT,
         )
 
     def _remote_exists(path: str) -> bool:
@@ -103,7 +110,9 @@ def scp_push(
             input(
                 f"Remote path '{remote_path}' exists.\n"
                 "Overwrite (o), rename (n), or cancel (c)? [o/n/c]: "
-            ).strip().lower()
+            )
+            .strip()
+            .lower()
         )
         if choice == "o":
             _remote_rm_rf(remote_path)
@@ -169,7 +178,11 @@ def scp_pull(
 
     def _ssh_remote(cmd: list[str], *, capture: bool = True):
         return subprocess.run(
-            cmd, check=False, capture_output=capture, text=True, timeout=DEFAULT_TIMEOUT,
+            cmd,
+            check=False,
+            capture_output=capture,
+            text=True,
+            timeout=DEFAULT_TIMEOUT,
         )
 
     def _remote_exists(path: str) -> bool:
@@ -181,9 +194,10 @@ def scp_pull(
     # If remote_path not provided, prompt; otherwise use as-is
     if remote_path is None:
         default_base = f"work/rclone-backup/{repo_name}"
-        remote_path = (input(
-            f"Enter remote folder to pull from for {remote_name} [{default_base}]: "
-        ).strip() or default_base)
+        remote_path = (
+            input(f"Enter remote folder to pull from for {remote_name} [{default_base}]: ").strip()
+            or default_base
+        )
     remote_path = _ensure_repo_suffix(remote_path, repo_name)
 
     # sanitize + ensure exists
@@ -204,7 +218,9 @@ def scp_pull(
             input(
                 f"Local destination '{dst_path}' exists.\n"
                 "Overwrite (o), rename (n), or cancel (c)? [o/n/c]: "
-            ).strip().lower()
+            )
+            .strip()
+            .lower()
         )
         if choice == "o":
             if dst_path.is_file():
@@ -253,10 +269,17 @@ def main():
 
     parser = argparse.ArgumentParser(description="SCP copy/pull mini-CLI")
     parser.add_argument("--remote", required=True, help="Remote name (e.g., ucloud)")
-    parser.add_argument("--local-path", help="Local path (source for push; destination for pull). Defaults to PROJECT_ROOT.")
-    parser.add_argument("--remote-path", help="Remote path (destination for push; source for pull).")
+    parser.add_argument(
+        "--local-path",
+        help="Local path (source for push; destination for pull). Defaults to PROJECT_ROOT.",
+    )
+    parser.add_argument(
+        "--remote-path", help="Remote path (destination for push; source for pull)."
+    )
     parser.add_argument("--no-recursive", action="store_true", help="Disable recursive scp.")
-    parser.add_argument("--pull", action="store_true", help="Pull from remote to local instead of pushing.")
+    parser.add_argument(
+        "--pull", action="store_true", help="Pull from remote to local instead of pushing."
+    )
     parser.add_argument("-v", "--verbose", action="count", default=0)
     args = parser.parse_args()
 
@@ -280,6 +303,3 @@ def main():
             remote_path=args.remote_path,
             recursive=recursive,
         )
-
-
-

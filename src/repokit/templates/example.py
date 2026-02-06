@@ -1,6 +1,12 @@
 import os
 
-from repokit_common import PROJECT_ROOT, ensure_correct_kernel, ext_map, language_dirs, load_from_env
+from repokit_common import (
+    PROJECT_ROOT,
+    ensure_correct_kernel,
+    ext_map,
+    language_dirs,
+    load_from_env,
+)
 from ..deps import main as get_setup_dependencies_main
 from ..readme.template import main as update_readme_main
 from .jinja import set_jinja_templates, write_script
