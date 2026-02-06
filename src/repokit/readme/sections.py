@@ -19,6 +19,7 @@ extension_map = {
     "sas": (".sas", ".ipynb"),
 }
 
+
 def main_text(json_file, code_path):
     programming_language = load_from_env("PROGRAMMING_LANGUAGE", ".cookiecutter")
 
@@ -226,6 +227,7 @@ The current repository structure is shown below. Descriptions can be edited in `
 
     return header
 
+
 def set_activate():
     os_type = platform.system().lower()
 
@@ -260,6 +262,7 @@ source deactivate.sh
 ```"""
 
     return usage
+
 
 def set_setup(
     programming_language,
@@ -306,7 +309,7 @@ def set_setup(
         setup += f"Project environment using {software_version} can be setup using the options described below.\n\n"
 
     else:
-        setup += f"Project `./setup` environment using **{py_version}** ccan be setup using the options described below.\n\n"
+        setup += f"Project `repokit` environment using **{py_version}** can be setup using the options described below.\n\n"
 
     setup += f">Only the **Conda** will install **{py_version}** along with its dependencies. For pip and uv installation methods, **{py_version}** must already be installed on your system.\n\n"
 
@@ -470,6 +473,7 @@ The following dependencies have been detected for **{software_version}**:
 
     return setup
 
+
 def _to_list(x: Optional[Union[str, Iterable[str]]]) -> List[str]:
     """Turn a string (split on , or ;) or an iterable into a clean list."""
 
@@ -480,6 +484,7 @@ def _to_list(x: Optional[Union[str, Iterable[str]]]) -> List[str]:
         return [p.strip() for p in re.split(r"[;,]", x) if p.strip()]
 
     return [str(p).strip() for p in x if str(p).strip()]
+
 
 def set_contact(authors=None, orcids=None, emails=None):
     a = _to_list(authors)
@@ -511,6 +516,7 @@ def set_contact(authors=None, orcids=None, emails=None):
             blocks.append("\n\n".join(lines))
 
     return "\n\n---\n\n".join(blocks) + ("\n\n---\n\n" if blocks else "")
+
 
 def find_scripts(folder_path, source_ext, notebook_ext):
     if isinstance(notebook_ext, str):
@@ -552,6 +558,7 @@ def find_scripts(folder_path, source_ext, notebook_ext):
 
     return found
 
+
 def get_run_command(orchestrator, programming_language):
     if not orchestrator:
         return None
@@ -569,6 +576,7 @@ def get_run_command(orchestrator, programming_language):
     }
 
     return command_map.get(programming_language.lower(), lambda s: f"<run {s}>")(script_name)
+
 
 def set_scripts(programming_language, folder_path, json_file="./file_description.json"):
     """
@@ -658,6 +666,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
 
     return "\n".join(md), run_command
 
+
 def set_config_table(programming_language, project_root="."):
     base_config = """The following configuration files are intentionally placed at the root of the repository. These are used by various tools for environment setup, dependency management, templating, and reproducibility.
 
@@ -715,6 +724,7 @@ def set_config_table(programming_language, project_root="."):
 
     return base_config
 
+
 def _set_cli():
     cli_section = """
 
@@ -738,7 +748,7 @@ The Repokit toolchain is split into three command-line interfaces:
 
 | `repokit copy` | Copies/synchronizes files based on configured project logic. |
 
-| `repokit deps-update` (`repokit deps`) | Updates dependency metadata for code/setup environments. |
+| `repokit deps-update` (`repokit deps`) | Updates dependency metadata for code environment. |
 
 | `repokit readme-update` (`repokit readme`) | Regenerates `README.md` from project metadata/structure. |
 
@@ -811,6 +821,7 @@ A full CLI walkthrough is maintained in the project README section for CLI tools
 """
 
     return cli_section
+
 
 def set_unit_tests(programming_language: str) -> str:
     lang_info = {
@@ -990,6 +1001,7 @@ This template includes built-in support for **unit testing** in {programming_lan
 
     return md
 
+
 def _set_ci(programming_language: str, code_repo: str) -> str:
     ci_matrix = {
         "github": {
@@ -1091,6 +1103,7 @@ git commit-skip "Updated documentation"
 
     return md
 
+
 def set_dcas():
     dcas = """To create a replication package that adheres to the [DCAS (Data and Code Sharing) standard](https://datacodestandard.org/), follow the guidelines ([AEA Data Editor's guidance](https://aeadataeditor.github.io/aea-de-guidance/preparing-for-data-deposit.html)) provided by the Social Science Data Editors. This ensures your research code and data are shared in a clear, reproducible format.
 
@@ -1110,6 +1123,7 @@ Individual journal policies may differ slightly. To ensure full compliance, chec
 
     return dcas
 
+
 def set_dataset():
     return """ To set up or configure a dataset, run the following command:
 
@@ -1126,6 +1140,7 @@ set-dataset
 |------------------|-----------------|---------------------------|-----------------|---------------------------|-----------------|-----------------|----------------------|-----------------|--------------------|------------------------|-----------------------|------------------------|
 
 """
+
 
 def read_dependencies(dependencies_file):
     def collect_dependencies(content):
@@ -1177,6 +1192,7 @@ def read_dependencies(dependencies_file):
 
     return dependencies_section
 
+
 def set_specs():
     system_spec = get_system_specs()
 
@@ -1189,6 +1205,7 @@ The project was developed and tested on the following operating system:
 """
 
     return specs
+
 
 def get_system_specs():
     def detect_gpu():
