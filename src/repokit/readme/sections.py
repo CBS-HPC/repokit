@@ -103,35 +103,31 @@ def main_text(json_file, code_path):
 
     unit_tests_block = ""
     if _has_tests(PROJECT_ROOT) and unit_tests.strip():
-        unit_tests_block = (
-            "<details>
+        unit_tests_block = f"""<details>
 
-"
-            "<summary><strong>?? Unit Testing</strong></summary><br>
+<summary><strong>🧪 Unit Testing</strong></summary><br>
 
-"
-            + unit_tests
-            + "
-
+ {unit_tests}
+    
 </details>
-"
-        )
+
+"""
+
 
     ci_block = ""
     if _has_ci(PROJECT_ROOT) and ci_section.strip():
-        ci_block = (
-            "<details>
+        ci_block = f"""<details>
+        
+<summary><strong>⚙️ Continuous Integration (CI)</strong></summary><br>
 
-"
-            "<summary><strong>?? Continuous Integration (CI)</strong></summary><br>
 
-"
-            + ci_section
-            + "
+{ci_section}
+
 
 </details>
-"
-        )
+
+"""
+
 
     dataset_section = set_dataset()
 
@@ -736,8 +732,6 @@ def set_config_table(programming_language, project_root="."):
 """
 
     return base_config
-
-
 
 
 def _has_tests(root):
