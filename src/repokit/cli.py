@@ -1,10 +1,8 @@
 """CLI entrypoint for repokit-only commands."""
-
 from __future__ import annotations
 
 import argparse
 import sys
-
 
 ALIASES = {
     "deps": "deps-update",
@@ -25,7 +23,9 @@ def _dispatch(func, argv: list[str], prog: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="repokit", description="repokit core commands")
+    parser = argparse.ArgumentParser(
+        prog="repokit", description="repokit core commands"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     commands = [
@@ -38,6 +38,7 @@ def main() -> None:
         "git-config",
         "ci-control",
         "lint",
+        "agent",
         # Short aliases
         "deps",
         "readme",
@@ -88,6 +89,10 @@ def main() -> None:
         from . import linting
 
         _dispatch(linting.main, ns.args, "repokit lint")
+    elif cmd == "agent":
+        from . import agent
+
+        _dispatch(agent.main, ns.args, "repokit agent")
 
 
 if __name__ == "__main__":

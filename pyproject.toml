@@ -30,6 +30,7 @@ dependencies = [
   "streamlit",
   "jsonschema",
   "dirhash",
+  "agr",
   "ruff>=0.6",
   "mypy>=1.10",
   "wxpython",
@@ -52,20 +53,8 @@ Issues = "https://github.com/CBS-HPC/repokit/issues"
 
 [project.scripts]
 repokit = "repokit.cli:main"
-backup = "repokit_backup.cli:main"
-copy = "repokit.scp:main"
-set-dataset = "repokit_dmp.dataset:main"
-update-dependencies = "repokit.deps:main"
-update-readme = "repokit.readme.template:main"
-reset-templates = "repokit.templates.code:main"
-code-examples = "repokit.templates.example:main"
-test-examples = "repokit.templates.tests:main"
-git-config = "repokit.repos:main"
-ci-control = "repokit.ci:ci_control"
-dcas-migration = "repokit_dmp.dcas:main"
-dmp-update = "repokit_dmp.dmp:main"
-dmp-editor = "repokit_dmp.editor:cli"
-code-linting = "repokit.linting:main"
+repokit-backup = "repokit_backup.cli:main"
+repokit-dmp = "repokit_dmp.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -110,6 +99,3 @@ check_untyped_defs = false
 no_implicit_optional = false
 strict_optional = false
 exclude = '(^\.venv/|^build/|^dist/|^external/)'
-
-
-
