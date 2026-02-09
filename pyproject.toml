@@ -67,6 +67,21 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+repokit = [
+  "templates/j2/**/*",
+  "templates/agent/**/*",
+  "templates/**/*.j2",
+  "templates/**/*.md",
+  "templates/**/*.yaml",
+  "templates/**/*.yml",
+  "templates/**/*.json",
+]
+
+
 [tool.ruff]
 line-length = 100
 # set to "py310" if your lowest supported Python is 3.10

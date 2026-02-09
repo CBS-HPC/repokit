@@ -101,6 +101,38 @@ def main_text(json_file, code_path):
 
     unit_tests = set_unit_tests(programming_language)
 
+    unit_tests_block = ""
+    if _has_tests(PROJECT_ROOT) and unit_tests.strip():
+        unit_tests_block = (
+            "<details>
+
+"
+            "<summary><strong>?? Unit Testing</strong></summary><br>
+
+"
+            + unit_tests
+            + "
+
+</details>
+"
+        )
+
+    ci_block = ""
+    if _has_ci(PROJECT_ROOT) and ci_section.strip():
+        ci_block = (
+            "<details>
+
+"
+            "<summary><strong>?? Continuous Integration (CI)</strong></summary><br>
+
+"
+            + ci_section
+            + "
+
+</details>
+"
+        )
+
     dataset_section = set_dataset()
 
     if programming_language.lower() != "python":
@@ -109,6 +141,7 @@ def main_text(json_file, code_path):
     else:
         head = f"📋 Instructions for installing {software_version}, and dependencies"
 
+
     header = f"""# {project_name}
 
 {project_description}
@@ -116,14 +149,6 @@ def main_text(json_file, code_path):
 ## 👤 Author & Contact
 
 {contact}
-
-<details>
-
-<summary><strong>🖥️ System Specifications </strong></summary><br>
-
-{system_spec}
-
-</details>
 
 <details>
 
@@ -137,7 +162,7 @@ def main_text(json_file, code_path):
 
 <details>
 
-<summary><strong>?Project Activation</strong></summary><br>
+<summary><strong>🚀 Project Activation</strong></summary><br>
 
 To configure the project's environmentincluding project paths, environment variables, and virtual environmentsrun the activation script for your operating system. These scripts read settings from the `.env` file.
 
@@ -171,21 +196,9 @@ To execute the full workflow pipeline, run the main orchestration script from th
 
 </details>
 
-<details>
+{unit_tests_block}
 
-<summary><strong>🧪 Unit Testing</strong></summary><br>
-
-{unit_tests}
-
-</details>
-
-<details>
-
-<summary><strong>⚙️ Continuous Integration (CI)</strong></summary><br>
-
-{ci_section}
-
-</details>
+{ci_block}
 
 <details>
 
@@ -725,6 +738,21 @@ def set_config_table(programming_language, project_root="."):
     return base_config
 
 
+
+
+def _has_tests(root):
+    return (root / "tests").exists() or (root / "test").exists()
+
+
+def _has_ci(root):
+    return (
+        (root / ".github" / "workflows").exists()
+        or (root / ".gitlab-ci.yml").exists()
+        or (root / ".woodpecker.yml").exists()
+        or (root / ".woodpecker").exists()
+    )
+
+
 def _set_cli():
     cli_section = """
 
@@ -1071,7 +1099,7 @@ More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
 
 CI is configured for **{code_repo.capitalize()}** (`{ci["config_file"]}`) with **{programming_language.capitalize()}** support.
 
-? Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps  critical for collaboration and long-term reproducibility.
+⚠️ Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps  critical for collaboration and long-term reproducibility.
 
 ##### 🔄 CI Control via CLI
 
