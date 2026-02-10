@@ -112,7 +112,7 @@ def _run_agr_init(dest: Path, guided: bool) -> None:
 
 def init_agent_resources(platform: str, dest: Path, force: bool, guided: bool) -> None:
     _apply_local_templates(dest, platform, force)
-    _run_agr_init(dest, guided=guided)
+    #_run_agr_init(dest, guided=guided)
 
 
 def main(argv: list[str] | None = None) -> None:
