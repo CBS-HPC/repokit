@@ -9,7 +9,7 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 - repokit-backup: rclone-based backup tooling
 - repokit-dmp: data management plan (DMP) tooling
 
-## Installation
+## ?? Installation
 
 ```bash
 pip install repokit
@@ -23,7 +23,7 @@ cd repokit
 pip install -e .
 ```
 
-## CLI overview
+## ?? CLI overview
 
 `repokit` provides a core CLI plus two companion CLIs that ship via dependencies:
 
@@ -395,7 +395,7 @@ git commit-skip "Updated documentation"
 ---
 </details>
 
-## Notes
+## ?? Notes
 
 - Installs CI templates from `repokit/templates/j2/ci` inside the package
 - Only runs if a valid `CODE_REPO` is set
@@ -559,11 +559,11 @@ git commit-skip "Updated documentation"
 ---
 </details>
 
-## Notes
+## ?? Notes
 
 - See `repokit-backup` and `repokit-dmp` READMEs for their CLI details.
 
-## License
+## ?? License
 
 MIT
 
