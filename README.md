@@ -40,9 +40,9 @@ pip install -e .
 | `repokit readme-update` (`repokit readme`) | Regenerate `README.md`. |
 | `repokit templates-reset` (`repokit templates`) | Regenerate script templates. |
 | `repokit examples-code` (`repokit ex-code`) | Generate code example scripts. |
-| `repokit examples-test` (`repokit ex-test`) | Generate test examples. |
-| `repokit git-config` | Apply Git configuration helpers. |
-| `repokit ci-control` | Enable/disable CI configuration. |
+| `repokit tests` (`repokit examples-test`, `repokit ex-test`) | Generate test examples. |
+| `repokit git` | Apply Git configuration helpers. |
+| `repokit ci` | Enable/disable CI configuration. |
 | `repokit lint` | Run language-aware linting. |
 | `repokit agent` | Scaffold agent files/skills. |
 
@@ -195,18 +195,18 @@ repokit templates-reset
 ---
 </details>
 
-### <a id="repokit-git-config"></a>
+### <a id="repokit-git"></a>
 <details>
-<summary><strong>🌐 <code>repokit git-config</code></strong></summary>
+<summary><strong>🌐 <code>repokit git</code></strong></summary>
 
-The `repokit git-config` command sets up your version control system and configures a remote Git repository on GitHub, GitLab, or Codeberg based on environment settings.
+The `repokit git` command sets up your version control system and configures a remote Git repository on GitHub, GitLab, or Codeberg based on environment settings.
 
 This command streamlines the process of remote repo creation, authentication, Git setup, and CI pipeline configuration.
 
 #### Usage
 
 ```bash
-repokit git-config
+repokit git
 ```
 
 #### What it does
@@ -235,19 +235,19 @@ repokit git-config
 ---
 </details>
 
-### <a id="repokit-ci-control"></a>
+### <a id="repokit-ci"></a>
 <details>
-<summary><strong>⚙️ <code>repokit ci-control</code></strong></summary>
+<summary><strong>⚙️ <code>repokit ci</code></strong></summary>
 
-The `repokit ci-control` command lets you enable or disable Continuous Integration (CI) for your project, and generates default CI configurations for your selected language and Git platform (GitHub, GitLab, or Codeberg).
+The `repokit ci` command lets you enable or disable Continuous Integration (CI) for your project, and generates default CI configurations for your selected language and Git platform (GitHub, GitLab, or Codeberg).
 
 This tool is helpful for bootstrapping or adjusting your CI setup without manually editing `.yml` files.
 
 #### Usage
 
 ```bash
-repokit ci-control --on     # Enable CI
-repokit ci-control --off    # Disable CI
+repokit ci --on     # Enable CI
+repokit ci --off    # Disable CI
 ```
 
 > You must specify one flag: `--on` or `--off`.
@@ -312,3 +312,5 @@ repokit lint
 ## License
 
 MIT
+
+

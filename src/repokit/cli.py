@@ -1,4 +1,4 @@
-"""CLI entrypoint for repokit-only commands."""
+﻿"""CLI entrypoint for repokit-only commands."""
 from __future__ import annotations
 
 import argparse
@@ -10,6 +10,10 @@ ALIASES = {
     "templates": "templates-reset",
     "ex-code": "examples-code",
     "ex-test": "examples-test",
+    "ex-tests": "examples-test",
+    "tests": "examples-test",
+    "git": "git-config",
+    "ci": "ci-control",
 }
 
 
@@ -39,12 +43,16 @@ def main() -> None:
         "ci-control",
         "lint",
         "agent",
-        # Short aliases
+        # Preferred aliases
         "deps",
         "readme",
         "templates",
+        "tests",
+        "git",
+        "ci",
         "ex-code",
         "ex-test",
+        "ex-tests",
     ]
     for name in commands:
         p = sub.add_parser(name)
@@ -76,15 +84,15 @@ def main() -> None:
     elif cmd == "examples-test":
         from .templates import tests as templates_tests
 
-        _dispatch(templates_tests.main, ns.args, "repokit examples-test")
+        _dispatch(templates_tests.main, ns.args, "repokit tests")
     elif cmd == "git-config":
         from . import repos
 
-        _dispatch(repos.main, ns.args, "repokit git-config")
+        _dispatch(repos.main, ns.args, "repokit git")
     elif cmd == "ci-control":
         from . import ci
 
-        _dispatch(ci.ci_control, ns.args, "repokit ci-control")
+        _dispatch(ci.ci_control, ns.args, "repokit ci")
     elif cmd == "lint":
         from . import linting
 

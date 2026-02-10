@@ -1,4 +1,4 @@
----
+﻿---
 name: repokit-ops
 description: Run core repokit CLI workflows with verification steps for dependencies, README sync, templates, and CI toggles.
 ---
@@ -17,10 +17,11 @@ description: Run core repokit CLI workflows with verification steps for dependen
 3. Refresh templates/examples when requested:
    - repokit templates
    - repokit ex-code
-   - repokit ex-test
+   - repokit tests
 4. Manage CI when requested:
-   - repokit ci-control --on or repokit ci-control --off
+   - repokit ci --on or repokit ci --off
 
 ## Verify
 - git status --short reflects expected file changes only.
 - Generated files are still valid (README.md, env files, template outputs).
+

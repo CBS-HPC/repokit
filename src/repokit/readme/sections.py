@@ -1,4 +1,4 @@
-import fnmatch
+﻿import fnmatch
 import os
 import pathlib
 import platform
@@ -105,7 +105,7 @@ def main_text(json_file, code_path):
     if _has_tests(PROJECT_ROOT) and unit_tests.strip():
         unit_tests_block = (
             "<details>\n\n"
-            "<summary><strong>🧪 Unit Testing</strong></summary><br>\n\n"
+            "<summary><strong>ðŸ§ª Unit Testing</strong></summary><br>\n\n"
             f"{unit_tests}\n\n"
             "</details>\n"
         )
@@ -115,7 +115,7 @@ def main_text(json_file, code_path):
     if _has_ci(PROJECT_ROOT) and ci_section.strip():
         ci_block = (
             "<details>\n\n"
-            "<summary><strong>⚙️ Continuous Integration (CI)</strong></summary><br>\n\n"
+            "<summary><strong>âš™ï¸ Continuous Integration (CI)</strong></summary><br>\n\n"
             f"{ci_section}\n\n"
             "</details>\n"
         )
@@ -124,23 +124,23 @@ def main_text(json_file, code_path):
     dataset_section = set_dataset()
 
     if programming_language.lower() != "python":
-        head = f"📋 Instructions for installing {py_version}, {software_version}, and dependencies"
+        head = f"ðŸ“‹ Instructions for installing {py_version}, {software_version}, and dependencies"
 
     else:
-        head = f"📋 Instructions for installing {software_version}, and dependencies"
+        head = f"ðŸ“‹ Instructions for installing {software_version}, and dependencies"
 
 
     header = f"""# {project_name}
 
 {project_description}
 
-## 👤 Author & Contact
+## ðŸ‘¤ Author & Contact
 
 {contact}
 
 <details>
 
-<summary><strong>🔧 Initial Setup</strong></summary><br>
+<summary><strong>ðŸ”§ Initial Setup</strong></summary><br>
 
 {head}
 
@@ -150,9 +150,9 @@ def main_text(json_file, code_path):
 
 <details>
 
-<summary><strong>🚀 Project Activation</strong></summary><br>
+<summary><strong>ðŸš€ Project Activation</strong></summary><br>
 
-To configure the project's environmentincluding project paths, environment variables, and virtual environmentsrun the activation script for your operating system. These scripts read settings from the `.env` file.
+To configure the project's environmentÂ—including project paths, environment variables, and virtual environmentsÂ—run the activation script for your operating system. These scripts read settings from the `.env` file.
 
 {activate}
 
@@ -160,11 +160,11 @@ To configure the project's environmentincluding project paths, environment var
 
 <details>
 
-<summary><strong>📜 Code Scripts</strong></summary><br>
+<summary><strong>ðŸ“œ Code Scripts</strong></summary><br>
 
 The project is written in **{software_version}** and includes modular scripts for standardized workflows, organized under `{code_path}`.
 
-##### ▶️ Run the Main Script
+##### â–¶ï¸ Run the Main Script
 
 To execute the full workflow pipeline, run the main orchestration script from the terminal:
 
@@ -190,7 +190,7 @@ To execute the full workflow pipeline, run the main orchestration script from th
 
 <details>
 
-<summary><strong>🗂️ Configuration Files (Root-Level)</strong></summary><br>
+<summary><strong>ðŸ—‚ï¸ Configuration Files (Root-Level)</strong></summary><br>
 
 {config}
 
@@ -198,7 +198,7 @@ To execute the full workflow pipeline, run the main orchestration script from th
 
 <details>
 
-<summary><strong>🧰 CLI Utilities</strong></summary><br>
+<summary><strong>ðŸ§° CLI Utilities</strong></summary><br>
 
 {cli_section}
 
@@ -206,7 +206,7 @@ To execute the full workflow pipeline, run the main orchestration script from th
 
 <details>
 
-<summary><strong>📦 Dataset List</strong></summary><br>
+<summary><strong>ðŸ“¦ Dataset List</strong></summary><br>
 
 {dataset_section}
 
@@ -214,7 +214,7 @@ To execute the full workflow pipeline, run the main orchestration script from th
 
 <details>
 
-<summary><strong>📁 Project Directory Structure</strong></summary><br>
+<summary><strong>ðŸ“ Project Directory Structure</strong></summary><br>
 
 The current repository structure is shown below. Descriptions can be edited in `./pyproject.toml`.
 
@@ -447,7 +447,7 @@ Rscript -e \"renv::restore()\"
 
 ```
 
-> ⚠️ Warning: Ensure you are using **{software_version}** for full compatibility. If `renv` is not already installed, run:
+> âš ï¸ Warning: Ensure you are using **{software_version}** for full compatibility. If `renv` is not already installed, run:
 
 ```
 
@@ -624,7 +624,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
         desc = file_descriptions.get(name)
 
         if desc:
-            md.append(f"- **{display}** (`{name}`)  {desc}")
+            md.append(f"- **{display}** (`{name}`) Â— {desc}")
 
         else:
             md.append(f"- **{display}** (`{name}`)")
@@ -633,7 +633,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
 
     if any("utils" in os.path.basename(p).lower() for _, p in scripts):
         md.append(
-            "🛠️ **Note**: `utils` does not define a `main()` function and should not be executed directly.\n"
+            "ðŸ› ï¸ **Note**: `utils` does not define a `main()` function and should not be executed directly.\n"
         )
 
     orch_candidates = [
@@ -694,7 +694,7 @@ def set_config_table(programming_language, project_root="."):
 
 ---
 
-#### 📄 `pyproject.toml` Sections Explained
+#### ðŸ“„ `pyproject.toml` Sections Explained
 | Section                   | Purpose                                                                                      |
 |---------------------------|----------------------------------------------------------------------------------------------|
 | `[project]`               | Declares the base project metadata for Python tooling (name, version, dependencies, etc.).   |
@@ -734,7 +734,7 @@ The Repokit toolchain is split into three command-line interfaces:
 
 - `repokit-dmp` for data management plan workflows
 
-> ℹ️ **Note**: CLI tools are installed in the active environment.  
+> â„¹ï¸ **Note**: CLI tools are installed in the active environment.  
 
 > Reinstall with: `uv pip install repokit` or `pip install repokit`
 
@@ -746,9 +746,9 @@ The Repokit toolchain is split into three command-line interfaces:
 | `repokit readme-update` (`repokit readme`) | Regenerates `README.md` from project metadata/structure. |
 | `repokit templates-reset` (`repokit templates`) | Regenerates language script templates. |
 | `repokit examples-code` (`repokit ex-code`) | Generates code example scripts/notebooks. |
-| `repokit examples-test` (`repokit ex-test`) | Generates test examples. |
-| `repokit git-config` | Applies Git configuration helpers. |
-| `repokit ci-control` | Enables/disables CI configuration. |
+| `repokit tests` (`repokit examples-test`, `repokit ex-test`) | Generates test examples. |
+| `repokit git` | Applies Git configuration helpers. |
+| `repokit ci` | Enables/disables CI configuration. |
 | `repokit lint` | Runs language-aware linting workflows. |
 
 ### `repokit-backup`
@@ -947,7 +947,7 @@ This template includes built-in support for **unit testing** in {programming_lan
 """.strip()
 
     if not folder_path.exists():
-        md += f"⚠️ Test folder not found: `{lang['test_folder']}`"
+        md += f"âš ï¸ Test folder not found: `{lang['test_folder']}`"
 
     else:
         # Filter test scripts based on naming convention
@@ -959,7 +959,7 @@ This template includes built-in support for **unit testing** in {programming_lan
         ]
 
         if not test_scripts:
-            md += f"\n\n⚠️ No valid test scripts were detected in `{lang['test_folder']}`.\nMake sure test files follow the expected format: `{lang['test_format']}`"
+            md += f"\n\nâš ï¸ No valid test scripts were detected in `{lang['test_folder']}`.\nMake sure test files follow the expected format: `{lang['test_format']}`"
 
         else:
             md += f"\n\nThe following test scripts were detected in `{lang['test_folder']}`:\n"
@@ -985,9 +985,9 @@ def _set_ci(programming_language: str, code_repo: str) -> str:
         "codeberg": {
             "supports": ["python", "r"],
             "config_file": ".woodpecker.yml",
-            "note": """⚠️ No support for MATLAB or cross-platform testing.  
+            "note": """âš ï¸ No support for MATLAB or cross-platform testing.  
 
-📝 CI is not enabled by default  to activate CI for your repository, you must [submit a request](https://codeberg.org/Codeberg-e.V./requests/issues/new?template=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml).  
+ðŸ“ CI is not enabled by default Â– to activate CI for your repository, you must [submit a request](https://codeberg.org/Codeberg-e.V./requests/issues/new?template=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml).  
 
 More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
         },
@@ -1039,17 +1039,17 @@ More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
 
 CI is configured for **{code_repo.capitalize()}** (`{ci["config_file"]}`) with **{programming_language.capitalize()}** support.
 
-⚠️ Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps  critical for collaboration and long-term reproducibility.
+âš ï¸ Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps Â— critical for collaboration and long-term reproducibility.
 
-##### 🔄 CI Control via CLI
+##### ðŸ”„ CI Control via CLI
 
 CI can be toggled on or off using the built-in CLI command:
 
 ```
 
-ci-control --on
+ci --on
 
-ci-control --off 
+ci --off 
 
 ```
 
@@ -1057,7 +1057,7 @@ ci-control --off
 
 {ci["note"]}
 
-##### 🧷 Git Shortcut for Skipping CI
+##### ðŸ§· Git Shortcut for Skipping CI
 
 To skip CI on a commit, use the built-in Git alias:
 
@@ -1290,3 +1290,5 @@ def get_system_specs():
     section_text = format_specs(info)
 
     return section_text
+
+
