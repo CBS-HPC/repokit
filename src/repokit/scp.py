@@ -256,7 +256,7 @@ def scp_pull(
         ) from e
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main():
     """
     Lightweight entry point to run SCP push/pull.

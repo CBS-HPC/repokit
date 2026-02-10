@@ -118,7 +118,7 @@ def create_scripts(programming_language):
         )
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main():
     # Ensure the working directory is the project root
     os.chdir(PROJECT_ROOT)

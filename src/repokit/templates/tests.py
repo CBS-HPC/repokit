@@ -93,7 +93,7 @@ def create_tests(programming_language, scripts_folder=None):
         )
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main():
     # Set up CLI parser
     parser = argparse.ArgumentParser(description="Create test files for scripts.")

@@ -8,7 +8,7 @@ from .templates.jinja import patch_jinja_templates, set_jinja_templates
 from .vcs import git_push
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def ci_config():
     # Ensure the working directory is the project root
 
@@ -185,7 +185,7 @@ def set_git_alis(project_root: str = "."):
         return False
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def ci_control():
     os.chdir(PROJECT_ROOT)
 

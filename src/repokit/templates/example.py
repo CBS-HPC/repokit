@@ -60,7 +60,7 @@ def create_example(project_language):
             print(f"Skipped {script_name} due to missing or faulty template.")
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main():
     # Ensure the working directory is the project root
     os.chdir(PROJECT_ROOT)

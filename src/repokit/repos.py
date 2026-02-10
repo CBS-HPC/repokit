@@ -385,7 +385,7 @@ def install_gh(install_path=None):
             print(f"Installer {installer_name} removed.")
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main():
     # Ensure the working directory is the project root
     os.chdir(PROJECT_ROOT)

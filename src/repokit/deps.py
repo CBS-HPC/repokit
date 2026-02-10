@@ -494,7 +494,7 @@ def _str2bool(v):
     raise argparse.ArgumentTypeError("Expected a boolean value (true/false).")
 
 
-@ensure_correct_kernel
+# @ensure_correct_kernel  # disabled
 def main(lock_all_packages: bool = False):
     # Ensure the working directory is the project root
     os.chdir(PROJECT_ROOT)
