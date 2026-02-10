@@ -9,7 +9,7 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 - repokit-backup: rclone-based backup tooling
 - repokit-dmp: data management plan (DMP) tooling
 
-## ?? Installation
+## Installation
 
 ```bash
 pip install repokit
@@ -23,7 +23,7 @@ cd repokit
 pip install -e .
 ```
 
-## ?? CLI overview
+## CLI overview
 
 `repokit` provides a core CLI plus two companion CLIs that ship via dependencies:
 
@@ -36,11 +36,11 @@ pip install -e .
 | Command | Description |
 |---------|-------------|
 | `repokit copy` | Copy/sync files based on project rules. |
-| `repokit deps-update` (`repokit deps`) | Update dependency metadata and lockfiles. |
-| `repokit readme-update` (`repokit readme`) | Regenerate `README.md`. |
-| `repokit templates-reset` (`repokit templates`) | Regenerate script templates. |
-| `repokit examples-code` (`repokit ex-code`) | Generate code example scripts. |
-| `repokit tests` (`repokit examples-test`, `repokit ex-test`) | Generate test examples. |
+| `repokit deps` | Update dependency metadata and lockfiles. |
+| `repokit readme` | Regenerate `README.md`. |
+| `repokit templates` | Regenerate script templates. |
+| `repokit ex-code` | Generate code example scripts. |
+| `repokit tests` | Generate test examples. |
 | `repokit git` | Apply Git configuration helpers. |
 | `repokit ci` | Enable/disable CI configuration. |
 | `repokit lint` | Run language-aware linting. |
@@ -48,18 +48,18 @@ pip install -e .
 
 Below is a detailed description of each CLI command available in the project, including usage, behavior, and example output.
 
-### <a id="repokit-deps-update"></a>
+### <a id="repokit-deps"></a>
 <details>
-<summary><strong>📦 <code>repokit deps-update</code></strong></summary>
+<summary><strong>📦 <code>repokit deps</code></strong></summary>
 
-The `repokit deps-update` command scans your project for imported packages and updates your dependency files (`requirements.txt`, `environment.yml`, and `uv.lock`) accordingly. It supports Python, R, MATLAB, and Stata, using language-specific tooling to track packages across `./src/` (or `./R/`, `./stata/do/`).
+The `repokit deps` command scans your project for imported packages and updates your dependency files (`requirements.txt`, `environment.yml`, and `uv.lock`) accordingly. It supports Python, R, MATLAB, and Stata, using language-specific tooling to track packages across `./src/` (or `./R/`, `./stata/do/`).
 
 This command is useful for keeping your project environment reproducible and ensuring that all scripts and notebooks reference installable dependencies.
 
 #### Usage
 
 ```bash
-repokit deps-update
+repokit deps
 ```
 
 #### What it does
@@ -85,11 +85,11 @@ repokit deps-update
 ---
 </details>
 
-### <a id="repokit-readme-update"></a>
+### <a id="repokit-readme"></a>
 <details>
-<summary><strong>📝 <code>repokit readme-update</code></strong></summary>
+<summary><strong>📝 <code>repokit readme</code></strong></summary>
 
-The `repokit readme-update` command regenerates your `README.md` with up-to-date project information, including:
+The `repokit readme` command regenerates your `README.md` with up-to-date project information, including:
 
 - Code metadata and environment details
 - Project folder structure as a tree diagram
@@ -121,18 +121,18 @@ repokit readme-update
 ---
 </details>
 
-### <a id="repokit-examples-code"></a>
+### <a id="repokit-ex-code"></a>
 <details>
-<summary><strong>💡 <code>repokit examples-code</code></strong></summary>
+<summary><strong>💡 <code>repokit ex-code</code></strong></summary>
 
-The `repokit examples-code` command generates realistic starter scripts and notebooks for your selected programming language using predefined Jinja2 templates.
+The `repokit ex-code` command generates realistic starter scripts and notebooks for your selected programming language using predefined Jinja2 templates.
 
 This is useful for quickly bootstrapping a project with well-structured, language-appropriate examples for each analysis stage.
 
 #### Usage
 
 ```bash
-repokit examples-code
+repokit ex-code
 ```
 
 #### What it does
@@ -155,18 +155,18 @@ repokit examples-code
 ---
 </details>
 
-### <a id="repokit-templates-reset"></a>
+### <a id="repokit-templates"></a>
 <details>
-<summary><strong>🧱 <code>repokit templates-reset</code></strong></summary>
+<summary><strong>🧱 <code>repokit templates</code></strong></summary>
 
-The `repokit templates-reset` command regenerates all core analysis and test scripts using predefined Jinja2 templates. It ensures a consistent structure and coding pattern across different scripting languages.
+The `repokit templates` command regenerates all core analysis and test scripts using predefined Jinja2 templates. It ensures a consistent structure and coding pattern across different scripting languages.
 
 This command is useful for initializing or resetting project scripts to their default structure.
 
 #### Usage
 
 ```bash
-repokit templates-reset
+repokit templates
 ```
 
 #### What it does
@@ -270,7 +270,7 @@ repokit ci --off    # Disable CI
 
 ##### <a id="unit-testing"></a>
 <details>
-<summary><strong>ðŸ§ª Unit Testing</strong></summary><br>
+<summary><strong> Unit Testing</strong></summary><br>
 
 Unit tests play a critical role in **ensuring the reliability and reproducibility** of your research code. This template provides built-in testing support for **Python**, **R**, **MATLAB**, and **Stata** to help you catch errors early and build trust in your results.
 
@@ -279,11 +279,11 @@ It supports both:
 - **Traditional unit testing** â€“ write tests to validate existing code
 - **Test-Driven Development (TDD)** â€“ write tests before code to guide design
 
-> ðŸ§ª Test scaffolding is automatically generated for each core analysis script (e.g., `s00_main`, `s04_preprocessing`), making it easy to integrate testing from day one.
+> Test scaffolding is automatically generated for each core analysis script (e.g., `s00_main`, `s04_preprocessing`), making it easy to integrate testing from day one.
 
 ---
 
-### ðŸ“ File Structure & Test Execution
+### File Structure & Test Execution
 
 During setup, a dedicated `tests/` folder is created. Matching test files are generated for each language and script:
 
@@ -294,7 +294,7 @@ During setup, a dedicated `tests/` folder is created. Matching test files are ge
 | MATLAB   | `matlab.unittest`  | `src/`           | `tests/`             | `test_*.m`       | `runtests('tests')`<br>`matlab -batch "..."`                   |
 | Stata    | `.do` script-based | `stata/do/`      | `tests/`             | `test_*.do`      | `do tests/test_s00_main.do`<br>`stata -b do tests/...`         |
 
-ðŸ“„ Example (Python):
+Example (Python):
 
 ```
 # Matching tests
@@ -305,11 +305,11 @@ tests/test_s00_main.py
 pytest
 ```
 
-ðŸ’¡ See the [CI section](#-continuous-integration-ci) for more on automated test execution.
+See the [CI section](#-continuous-integration-ci) for more on automated test execution.
 
 ---
 
-### âœ… Best Practices
+### Best Practices
 
 - **Test core logic and workflows** â€“ e.g., cleaning, transformation, modeling functions  
 - **Cover edge cases** â€“ missing data, invalid inputs, unexpected file formats  
@@ -320,7 +320,7 @@ pytest
   - MATLAB: `verifyEqual()`, `verifyTrue()`
   - Stata: `assert`
 
-ðŸ§© Match test names to your scripts for clarity:  
+Match test names to your scripts for clarity:  
 Example: `s05_modeling.R` â†’ `test-s05_modeling.R`
 
 > âœ… Your tests donâ€™t have to be exhaustive. Focus on **critical functions** and **key workflow branches**.
@@ -340,7 +340,7 @@ Continuous Integration (CI) helps ensure your research project is **reproducible
 
 âœ… Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS).This provides early detection of broken dependencies, incompatible packages, or missing setup steps â€” critical for collaboration and long-term reproducibility.
 
-#### ðŸ” What the CI Pipeline Does
+#### What the CI Pipeline Does
 
 Each auto-generated CI pipeline:
 
@@ -351,7 +351,7 @@ Each auto-generated CI pipeline:
 3. Executes tests in the `tests/` directory (if present)
 4. Outputs logs and results for debugging or documentation
 
-#### âœ… Supported CI Platforms
+#### Supported CI Platforms
 
 | Platform     | Supported Languages     | OS Support              | Config File                |
 |--------------|--------------------------|--------------------------|----------------------------|
@@ -361,21 +361,21 @@ Each auto-generated CI pipeline:
 
 > âš ï¸ **Stata is not supported** on any CI platform due to licensing limitations and lack of headless automation.
 
-#### âš ï¸ MATLAB CI Caveats
+#### MATLAB CI Caveats
 
 MATLAB CI support is included as a **starter configuration**. It may require manual setup, including licensing and tokens.
 
 - **GitHub Actions**: Uses [`setup-matlab`](https://github.com/matlab-actions/setup-matlab) and requires a `MATLAB_TOKEN`.
 - **GitLab CI/CD**: Uses [MathWorks' CI template](https://github.com/mathworks/matlab-gitlab-ci-template) and requires a license server or `MLM_LICENSE_FILE`.
 
-#### ðŸ“ Codeberg CI Requires Activation
+#### Codeberg CI Requires Activation
 
 CI is **not enabled by default** on Codeberg. To enable:
 
 - Submit a request via [Codeberg CI Activation Form](https://codeberg.org/Codeberg-e.V./requests/issues/newtemplate=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml)
 - Learn more in the [Codeberg CI documentation](https://docs.codeberg.org/ci/)
 
-#### ðŸ› ï¸ CI Control via CLI
+#### CI Control via CLI
 
 You can toggle CI setup on or off at any time using the built-in CLI:
 
@@ -384,7 +384,7 @@ repokit ci --on
 repokit ci --off
 ```
 
-##### ðŸ§· Skip CI for a Commit
+##### Skip CI for a Commit
 
 Use this Git alias to skip CI on minor commits:
 
@@ -395,7 +395,7 @@ git commit-skip "Updated documentation"
 ---
 </details>
 
-## ?? Notes
+## Notes
 
 - Installs CI templates from `repokit/templates/j2/ci` inside the package
 - Only runs if a valid `CODE_REPO` is set
@@ -432,138 +432,11 @@ repokit lint
 ---
 </details>
 
-### <a id="unit-testing"></a>
-<details>
-<summary><strong>ðŸ§ª Unit Testing</strong></summary><br>
-
-Unit tests play a critical role in **ensuring the reliability and reproducibility** of your research code. This template provides built-in testing support for **Python**, **R**, **MATLAB**, and **Stata** to help you catch errors early and build trust in your results.
-
-It supports both:
-
-- **Traditional unit testing** â€“ write tests to validate existing code
-- **Test-Driven Development (TDD)** â€“ write tests before code to guide design
-
-> ðŸ§ª Test scaffolding is automatically generated for each core analysis script (e.g., `s00_main`, `s04_preprocessing`), making it easy to integrate testing from day one.
-
----
-
-### ðŸ“ File Structure & Test Execution
-
-During setup, a dedicated `tests/` folder is created. Matching test files are generated for each language and script:
-
-| Language | Test Framework     | Code Folder     | Test Folder         | File Format     | Run Command                                                   |
-|----------|--------------------|------------------|----------------------|------------------|----------------------------------------------------------------|
-| Python   | `pytest`           | `src/`           | `tests/`             | `test_*.py`      | `pytest`                                                       |
-| R        | `testthat`         | `R/`             | `tests/testthat/`    | `test-*.R`       | `testthat::test_dir("tests/testthat")`<br>`Rscript -e '...'`   |
-| MATLAB   | `matlab.unittest`  | `src/`           | `tests/`             | `test_*.m`       | `runtests('tests')`<br>`matlab -batch "..."`                   |
-| Stata    | `.do` script-based | `stata/do/`      | `tests/`             | `test_*.do`      | `do tests/test_s00_main.do`<br>`stata -b do tests/...`         |
-
-ðŸ“„ Example (Python):
-
-```
-# Matching tests
-src/s00_main.py
-tests/test_s00_main.py
-
-# Run Tests
-pytest
-```
-
-ðŸ’¡ See the [CI section](#-continuous-integration-ci) for more on automated test execution.
-
----
-
-### âœ… Best Practices
-
-- **Test core logic and workflows** â€“ e.g., cleaning, transformation, modeling functions  
-- **Cover edge cases** â€“ missing data, invalid inputs, unexpected file formats  
-- **Write independent tests** â€“ avoid shared state between tests  
-- **Use language-specific assertions:**
-  - Python: `assert`
-  - R: `expect_equal()`, `expect_error()`
-  - MATLAB: `verifyEqual()`, `verifyTrue()`
-  - Stata: `assert`
-
-ðŸ§© Match test names to your scripts for clarity:  
-Example: `s05_modeling.R` â†’ `test-s05_modeling.R`
-
-> âœ… Your tests donâ€™t have to be exhaustive. Focus on **critical functions** and **key workflow branches**.
-
----
-</details>
-
-### <a id="ci"></a>
-<details>
-<summary><strong>âš™ï¸ Continuous Integration (CI)</strong></summary><br>
-
-Continuous Integration (CI) helps ensure your research project is **reproducible, portable, and robust** across different systems. This template includes built-in CI support for **Python**, **R**, and **MATLAB** using:
-
-- **GitHub Actions**
-- **GitLab CI/CD**
-- **Codeberg CI** (Woodpecker)
-
-âœ… Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS).This provides early detection of broken dependencies, incompatible packages, or missing setup steps â€” critical for collaboration and long-term reproducibility.
-
-#### ðŸ” What the CI Pipeline Does
-
-Each auto-generated CI pipeline:
-
-1. Installs the appropriate language runtime (e.g., Python, R, MATLAB)
-2. Installs project dependencies:
-   - Python: via `requirements.txt`
-   - R: via `renv::restore()` using `R/renv.lock`
-3. Executes tests in the `tests/` directory (if present)
-4. Outputs logs and results for debugging or documentation
-
-#### âœ… Supported CI Platforms
-
-| Platform     | Supported Languages     | OS Support              | Config File                |
-|--------------|--------------------------|--------------------------|----------------------------|
-| **GitHub**   | Python, R, MATLAB        | Linux, Windows, macOS    | `.github/workflows/ci.yml` |
-| **GitLab**   | Python, R, MATLAB        | Linux only               | `.gitlab-ci.yml`           |
-| **Codeberg** | Python, R *(no MATLAB)*  | Linux only               | `.woodpecker.yml`          |
-
-> âš ï¸ **Stata is not supported** on any CI platform due to licensing limitations and lack of headless automation.
-
-#### âš ï¸ MATLAB CI Caveats
-
-MATLAB CI support is included as a **starter configuration**. It may require manual setup, including licensing and tokens.
-
-- **GitHub Actions**: Uses [`setup-matlab`](https://github.com/matlab-actions/setup-matlab) and requires a `MATLAB_TOKEN`.
-- **GitLab CI/CD**: Uses [MathWorks' CI template](https://github.com/mathworks/matlab-gitlab-ci-template) and requires a license server or `MLM_LICENSE_FILE`.
-
-#### ðŸ“ Codeberg CI Requires Activation
-
-CI is **not enabled by default** on Codeberg. To enable:
-
-- Submit a request via [Codeberg CI Activation Form](https://codeberg.org/Codeberg-e.V./requests/issues/newtemplate=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml)
-- Learn more in the [Codeberg CI documentation](https://docs.codeberg.org/ci/)
-
-#### ðŸ› ï¸ CI Control via CLI
-
-You can toggle CI setup on or off at any time using the built-in CLI:
-
-```bash
-repokit ci --on
-repokit ci --off
-```
-
-##### ðŸ§· Skip CI for a Commit
-
-Use this Git alias to skip CI on minor commits:
-
-```
-git commit-skip "Updated documentation"
-```
-
----
-</details>
-
-## ?? Notes
+## Notes
 
 - See `repokit-backup` and `repokit-dmp` READMEs for their CLI details.
 
-## ?? License
+## License
 
 MIT
 
