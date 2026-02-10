@@ -4,27 +4,11 @@ import argparse
 import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 from repokit_common import PROJECT_ROOT
 
-DEFAULT_SOURCE = "https://github.com/kasperjunge/agent-resources"
 TEMPLATE_DIR = Path(__file__).resolve().parent / "templates" / "agent"
-
-
-def _find_platform_root(repo_root: Path, platform: str) -> Path:
-    candidates = [
-        repo_root / platform,
-        repo_root / "platforms" / platform,
-        repo_root / "templates" / platform,
-        repo_root / "skills" / platform,
-        repo_root / "agents" / platform,
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate
-    return repo_root
 
 
 def _platform_dir(dest: Path, platform: str) -> Path | None:
@@ -126,14 +110,8 @@ def _run_agr_init(dest: Path, guided: bool) -> None:
     subprocess.run(cmd, check=True, cwd=dest)
 
 
-def init_agent_resources(source: str, platform: str, dest: Path, force: bool, guided: bool) -> None:
+def init_agent_resources(platform: str, dest: Path, force: bool, guided: bool) -> None:
     _apply_local_templates(dest, platform, force)
-    with tempfile.TemporaryDirectory(prefix="repokit-agent-") as tmp:
-        repo_root = Path(tmp) / "repo"
-        subprocess.run(["git", "clone", "--depth", "1", source, str(repo_root)], check=True)
-        platform_root = _find_platform_root(repo_root, platform)
-        _copy_tree(platform_root, dest, force=force)
-
     _run_agr_init(dest, guided=guided)
 
 
@@ -141,7 +119,6 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="repokit agent", description="Initialize agent resources")
     parser.add_argument("action", choices=["init"])
     parser.add_argument("--platform", choices=["codex", "claude", "cursor"], default="codex")
-    parser.add_argument("--source", default=DEFAULT_SOURCE)
     parser.add_argument("--dest", default=None)
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
     parser.add_argument("--agr-guided", action="store_true", help="Run agr init -i after scaffolding")
@@ -153,7 +130,7 @@ def main(argv: list[str] | None = None) -> None:
 
     dest = Path(ns.dest).resolve() if ns.dest else PROJECT_ROOT
     if ns.action == "init":
-        init_agent_resources(ns.source, ns.platform, dest, ns.force, guided=ns.agr_guided)
+        init_agent_resources(ns.platform, dest, ns.force, guided=ns.agr_guided)
 
 
 if __name__ == "__main__":
