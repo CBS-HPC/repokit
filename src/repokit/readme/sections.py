@@ -670,19 +670,12 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
 
 def set_config_table(programming_language, project_root="."):
     base_config = """The following configuration files are intentionally placed at the root of the repository. These are used by various tools for environment setup, dependency management, templating, and reproducibility.
-
 | File              | Purpose                                                                                          |
-
 |-------------------|--------------------------------------------------------------------------------------------------|
-
 | `pyproject.toml`  | Project metadata for packaging, CLI tools, sync rules, platform logic, and documentation         |
-
 | `.env`            | Defines environment-specific variables (e.g., paths, secrets). Typically excluded from version control. |
-
 | `.gitignore`      | Excludes unnecessary files from Git version control                                              |
-
 | `environment.yml` | Conda environment definition for Python/R, including packages and versions                       |
-
 | `requirements.txt`| Pip-based Python dependencies for lightweight environments                                       |
 
 """
@@ -702,23 +695,14 @@ def set_config_table(programming_language, project_root="."):
 ---
 
 #### 📄 `pyproject.toml` Sections Explained
-
 | Section                   | Purpose                                                                                      |
-
 |---------------------------|----------------------------------------------------------------------------------------------|
-
 | `[project]`               | Declares the base project metadata for Python tooling (name, version, dependencies, etc.).   |
-
 | `[tool.uv]`               | Placeholder for settings related to the uv package manager (currently unused).               |
-
 | `[tool.cookiecutter]`     | Stores project template metadata (e.g., author, licenses, language) for reproducibility and scaffolding. |
-
 | `[tool.rcloneignore]`     | Defines file patterns to ignore when syncing with remote tools like Rclone.                  |
-
 | `[tool.treeignore]`       | Specifies which files and folders to exclude from directory tree visualizations.             |
-
 | `[tool.platform_rules]`   | Maps Python packages to operating systems for conditional installations.                     |
-
 | `[tool.file_descriptions]`| Contains descriptions of files and directories for automation, UI labels, and documentation. |
 
 """
@@ -755,63 +739,36 @@ The Repokit toolchain is split into three command-line interfaces:
 > Reinstall with: `uv pip install repokit` or `pip install repokit`
 
 ### `repokit` (core)
-
 | Command | Description |
-
 |---------|-------------|
-
 | `repokit copy` | Copies/synchronizes files based on configured project logic. |
-
 | `repokit deps-update` (`repokit deps`) | Updates dependency metadata for code environment. |
-
 | `repokit readme-update` (`repokit readme`) | Regenerates `README.md` from project metadata/structure. |
-
 | `repokit templates-reset` (`repokit templates`) | Regenerates language script templates. |
-
 | `repokit examples-code` (`repokit ex-code`) | Generates code example scripts/notebooks. |
-
 | `repokit examples-test` (`repokit ex-test`) | Generates test examples. |
-
 | `repokit git-config` | Applies Git configuration helpers. |
-
 | `repokit ci-control` | Enables/disables CI configuration. |
-
 | `repokit lint` | Runs language-aware linting workflows. |
 
 ### `repokit-backup`
-
 | Command | Description |
-
 |---------|-------------|
-
 | `repokit-backup add` | Configure a backup remote and mapping. |
-
 | `repokit-backup push` | Push/sync project data to remote storage. |
-
 | `repokit-backup pull` | Restore/sync from remote to local project. |
-
 | `repokit-backup diff` | Show remote/local diff report. |
-
 | `repokit-backup list` | List configured remotes/mappings. |
-
 | `repokit-backup delete` | Remove a configured remote mapping. |
-
 | `repokit-backup transfer` | Transfer data between two remotes. |
-
 | `repokit-backup types` | List supported remote types. |
 
 ### `repokit-dmp`
-
 | Command | Description |
-
 |---------|-------------|
-
 | `repokit-dmp dataset` | Initialize/update dataset metadata and structure links. |
-
 | `repokit-dmp update` | Create/update `dmp.json` from project metadata. |
-
 | `repokit-dmp editor` | Launch Streamlit editor for DMP and publishing helpers. |
-
 | `repokit-dmp dcas-migration` | Run DCAS migration/validation workflow. |
 
 #### Usage
@@ -981,11 +938,8 @@ stata -b do tests/test_s00_main.do
     md = f"""
 
 This template includes built-in support for **unit testing** in {programming_language.capitalize()} to promote research reliability and reproducibility.
-
 | Language | Test Framework     | Code Folder | Test Folder       | Test File Format |
-
 | -------- | ------------------ | ----------- | ----------------- | ---------------- |
-
 | {programming_language.capitalize()}   | {lang["test_framework"]} | {lang["code_folder"]} | {lang["test_folder"]} | {lang["test_format"]} |
 
 {lang["example"]}
@@ -1148,9 +1102,7 @@ set-dataset
 ```
 
 **The following datasets are included in the project:**
-
 | Name             | Location        |Hash                       | Provided        | Run Command               | Number of Files | Total Size (MB) | File Formats         | Source          | DOI                | Citation               | License               | Notes                  |
-
 |------------------|-----------------|---------------------------|-----------------|---------------------------|-----------------|-----------------|----------------------|-----------------|--------------------|------------------------|-----------------------|------------------------|
 
 """
