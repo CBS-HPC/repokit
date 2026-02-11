@@ -87,7 +87,7 @@ def main_text(json_file, code_path):
 
     usage, run_command = set_scripts(programming_language, code_path, json_file)
 
-    config = set_config_table(programming_language)
+    config = set_config_table()
 
     cli_section = _set_cli()
 
@@ -312,7 +312,8 @@ def set_setup(
     else:
         setup += f"Project `repokit` environment using **{py_version}** can be setup using the options described below.\n\n"
 
-    setup += f">Only the **Conda** will install **{py_version}** along with its dependencies. For pip and uv installation methods, **{py_version}** must already be installed on your system.\n\n"
+    if _has_conda(PROJECT_ROOT):
+        setup += f">Only the **Conda** will install **{py_version}** along with its dependencies. For pip and uv installation methods, **{py_version}** must already be installed on your system.\n\n"
 
     if programming_language.lower() in ["matlab", "stata", "sas"]:
         f"Project `code` environment using **{software_version}** can be installed using the options described below.\n\n"
@@ -356,14 +357,14 @@ pip install -r requirements.txt
 </details>
 
 """
+    if _has_conda(PROJECT_ROOT):
+        if programming_language.lower() == "r":
+            conda_title = f"Conda Installation (Installs **{py_version}** and **{software_version}**)"
 
-    if programming_language.lower() == "r":
-        conda_title = f"Conda Installation (Installs **{py_version}** and **{software_version}**)"
+        else:
+            conda_title = f"Conda Installation (Installs **{py_version}**)"
 
-    else:
-        conda_title = f"Conda Installation (Installs **{py_version}**)"
-
-    setup += f"""<details>
+        setup += f"""<details>
 
 <summary><strong>{conda_title}</strong></summary><br>
 
@@ -379,7 +380,7 @@ conda env create -f environment.yml
 
     setup += """#### Installing the `repokit` package
 
-Once you have installed the python environment with Conda, pip, or uv, install the Repokit CLI from PyPI:
+Once you have installed the python environment, install the Repokit CLI from PyPI:
 
 ```
 uv pip install repokit
@@ -412,8 +413,6 @@ The project code in `{code_path}` is written in **{software_version}** with the 
 The project code in `{code_path}` is written in **{software_version}** and can be set up using one of the option described below.
 
 To use **{software_version}**, it must already be installed on your system.
-
->**Conda** is the only installation method described earlier that will install **{software_version}** automatically.
 
 The detected {software_version} dependencies are listed below:
 
@@ -650,7 +649,7 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
     return "\n".join(md), run_command
 
 
-def set_config_table(programming_language, project_root="."):
+def set_config_table():
     files_to_check = [
         (
             "pyproject.toml",
@@ -666,17 +665,13 @@ def set_config_table(programming_language, project_root="."):
             "Conda environment definition for Python/R, including packages and versions",
         ),
         ("requirements.txt", "Pip-based Python dependencies for lightweight environments"),
+        ("renv.lock", "Records the exact versions of R packages used in the project"),
         ("uv.lock", "Locked Python dependencies file for reproducible installs with `uv`"),
     ]
 
-    if programming_language.lower() == "r":
-        files_to_check.append(
-            ("renv.lock", "Records the exact versions of R packages used in the project")
-        )
-
     rows = []
     for filename, purpose in files_to_check:
-        if os.path.exists(os.path.join(project_root, filename)):
+        if (PROJECT_ROOT / filename).exists():
             rows.append(f"| `{filename}` | {purpose} |")
 
     if rows:
@@ -693,10 +688,11 @@ def set_config_table(programming_language, project_root="."):
             "No standard configuration files were detected at the repository root.\n\n"
         )
 
-    base_config += """
+    if (PROJECT_ROOT / "pyproject.toml").exists():
+
+        base_config += """
 
 ---
-
 #### `pyproject.toml` Sections Explained
 | Section                   | Purpose                                                                                      |
 |---------------------------|----------------------------------------------------------------------------------------------|
@@ -712,6 +708,8 @@ def set_config_table(programming_language, project_root="."):
 
     return base_config
 
+def _has_conda(root):
+    return (root / ".conda").exists() or (root / "environment.yml").exists()
 
 def _has_tests(root):
     return (root / "tests").exists() or (root / "test").exists()
