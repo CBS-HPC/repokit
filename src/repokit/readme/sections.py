@@ -395,7 +395,7 @@ pip install repokit
 
 ```
 
-This makes CLI tools such as `run-setup`, `update-readme`, and `set-dataset` available in your environment.
+This makes CLI tools such as `repokit readme`, `repokit-dmp dataset` and `repokit-backup push` available in your environment.
 
 """
 
@@ -1092,7 +1092,7 @@ def set_dataset():
 
 ```
 
-set-dataset
+repokit-dmp dataset
 
 ```
 
