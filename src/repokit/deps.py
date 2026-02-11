@@ -434,6 +434,8 @@ def setup_stata(programming_language, msg: str):
         print(output)
         print(msg)
 
+def _has_conda(root):
+    return (root / ".conda").exists() or (root / "environment.yml").exists()
 
 def update_env_files(lock_all_packages: bool = False):
     programming_language = load_from_env("PROGRAMMING_LANGUAGE", ".cookiecutter")
@@ -442,7 +444,7 @@ def update_env_files(lock_all_packages: bool = False):
     create_requirements_txt(
         requirements_file="requirements.txt", lock_all_packages=lock_all_packages
     )
-    if python_env_manager.lower() == "venv":
+    if python_env_manager.lower() == "venv" and _has_conda(PROJECT_ROOT):
         create_conda_environment_yml(
             repo_name,
             r_version=load_from_env("R_VERSION", ".cookiecutter")
@@ -453,7 +455,9 @@ def update_env_files(lock_all_packages: bool = False):
         export_conda_env()
 
     tag_requirements_txt(requirements_file="requirements.txt")
-    tag_env_file(env_file="environment.yml")
+    
+    if _has_conda(PROJECT_ROOT):
+        tag_env_file(env_file="environment.yml")
 
 
 def update_setup_dependency():

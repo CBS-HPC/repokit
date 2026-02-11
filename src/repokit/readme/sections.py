@@ -351,7 +351,6 @@ You can install the Python dependencies using **{py_version}** and **{pip_versio
 
 ```
 pip install -r requirements.txt
-
 ```
 
 </details>
@@ -372,7 +371,6 @@ Install the required dependencies using **{conda_version}** and the provided `en
 
 ```
 conda env create -f environment.yml
-
 ```
 
 </details>
@@ -385,14 +383,12 @@ Once you have installed the python environment with Conda, pip, or uv, install t
 
 ```
 uv pip install repokit
-
 ```
 
 or 
 
 ```
 pip install repokit
-
 ```
 
 This makes CLI tools such as `repokit readme`, `repokit-dmp dataset` and `repokit-backup push` available in your environment.
@@ -405,9 +401,7 @@ This makes CLI tools such as `repokit readme`, `repokit-dmp dataset` and `repoki
 The project code in `{code_path}` is written in **{software_version}** with the detected {software_version} dependencies are listed below:
 
 ```code_dependencies 
-
 {code_dependencies}
-
 ```
 
 """
@@ -424,9 +418,7 @@ To use **{software_version}**, it must already be installed on your system.
 The detected {software_version} dependencies are listed below:
 
 ```code_dependencies 
-
 {code_dependencies}
-
 ```
 
 ##### Renv Installation
@@ -444,9 +436,7 @@ Rscript -e \"renv::restore()\"
 > Warning: Ensure you are using **{software_version}** for full compatibility. If `renv` is not already installed, run:
 
 ```
-
 install.packages("renv")
-
 ```
 
 """
@@ -459,9 +449,7 @@ The project code in `{code_path}` is written in **{software_version}** and requi
 The following dependencies have been detected for **{software_version}**:
 
 ```code_dependencies 
-
 {code_dependencies}
-
 ```
 
 """
@@ -663,26 +651,47 @@ def set_scripts(programming_language, folder_path, json_file="./file_description
 
 
 def set_config_table(programming_language, project_root="."):
-    base_config = """The following configuration files are intentionally placed at the root of the repository. These are used by various tools for environment setup, dependency management, templating, and reproducibility.
-| File              | Purpose                                                                                          |
-|-------------------|--------------------------------------------------------------------------------------------------|
-| `pyproject.toml`  | Project metadata for packaging, CLI tools, sync rules, platform logic, and documentation         |
-| `.env`            | Defines environment-specific variables (e.g., paths, secrets). Typically excluded from version control. |
-| `.gitignore`      | Excludes unnecessary files from Git version control                                              |
-| `environment.yml` | Conda environment definition for Python/R, including packages and versions                       |
-| `requirements.txt`| Pip-based Python dependencies for lightweight environments                                       |
-
-"""
+    files_to_check = [
+        (
+            "pyproject.toml",
+            "Project metadata for packaging, CLI tools, sync rules, platform logic, and documentation",
+        ),
+        (
+            ".env",
+            "Defines environment-specific variables (e.g., paths, secrets). Typically excluded from version control.",
+        ),
+        (".gitignore", "Excludes unnecessary files from Git version control"),
+        (
+            "environment.yml",
+            "Conda environment definition for Python/R, including packages and versions",
+        ),
+        ("requirements.txt", "Pip-based Python dependencies for lightweight environments"),
+        ("uv.lock", "Locked Python dependencies file for reproducible installs with `uv`"),
+    ]
 
     if programming_language.lower() == "r":
-        base_config += "| `renv.lock`         | Records the exact versions of R packages used in the project                                   |\n"
+        files_to_check.append(
+            ("renv.lock", "Records the exact versions of R packages used in the project")
+        )
 
-    uv_lock_path = os.path.join(project_root, "uv.lock")
+    rows = []
+    for filename, purpose in files_to_check:
+        if os.path.exists(os.path.join(project_root, filename)):
+            rows.append(f"| `{filename}` | {purpose} |")
 
-    if os.path.exists(uv_lock_path):
-        base_config += "| `uv.lock`           | Locked Python dependencies file for reproducible installs with `uv`                            |\n"
-
-    # Add pyproject.toml section explanation
+    if rows:
+        base_config = (
+            "The following configuration files are intentionally placed at the root of the repository. "
+            "These are used by various tools for environment setup, dependency management, templating, and reproducibility.\n"
+            "| File | Purpose |\n"
+            "|------|---------|\n"
+            + "\n".join(rows)
+            + "\n\n"
+        )
+    else:
+        base_config = (
+            "No standard configuration files were detected at the repository root.\n\n"
+        )
 
     base_config += """
 
