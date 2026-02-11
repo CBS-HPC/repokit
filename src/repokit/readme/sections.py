@@ -722,11 +722,11 @@ def _set_cli():
 
 The Repokit toolchain is split into three command-line interfaces:
 
-- `repokit` for core project automation
+- [`repokit`](https://github.com/CBS-HPC/repokit) for core project automation
 
-- `repokit-backup` for backup/sync workflows
+- [`repokit-backup`](https://github.com/CBS-HPC/repokit-backup) for backup/sync workflows
 
-- `repokit-dmp` for data management plan workflows
+- [`repokit-dmp`]() for data management plan workflows
 
 > **Note**: CLI tools are installed in the active environment.  
 
@@ -735,12 +735,11 @@ The Repokit toolchain is split into three command-line interfaces:
 ### `repokit` (core)
 | Command | Description |
 |---------|-------------|
-| `repokit copy` | Copies/synchronizes files based on configured project logic. |
-| `repokit deps-update` (`repokit deps`) | Updates dependency metadata for code environment. |
-| `repokit readme-update` (`repokit readme`) | Regenerates `README.md` from project metadata/structure. |
-| `repokit templates-reset` (`repokit templates`) | Regenerates language script templates. |
-| `repokit examples-code` (`repokit ex-code`) | Generates code example scripts/notebooks. |
-| `repokit tests` (`repokit examples-test`, `repokit ex-test`) | Generates test examples. |
+| `repokit deps | Updates dependency metadata for code environment. |
+| `repokit readme | Regenerates `README.md` from project metadata/structure. |
+| `repokit templates | Regenerates language script templates. |
+| `repokit ex-code` | Generates code example scripts/notebooks. |
+| `repokit tests` | Generates test examples. |
 | `repokit git` | Applies Git configuration helpers. |
 | `repokit ci` | Enables/disables CI configuration. |
 | `repokit lint` | Runs language-aware linting workflows. |
@@ -764,6 +763,8 @@ The Repokit toolchain is split into three command-line interfaces:
 | `repokit-dmp update` | Create/update `dmp.json` from project metadata. |
 | `repokit-dmp editor` | Launch Streamlit editor for DMP and publishing helpers. |
 | `repokit-dmp dcas-migration` | Run DCAS migration/validation workflow. |
+
+See [`repokit`](https://github.com/CBS-HPC/repokit), [`repokit-backup`](https://github.com/CBS-HPC/repokit-backup), and [`repokit-dmp`](https://github.com/CBS-HPC/repokit-dmp) READMEs for their CLI details
 
 #### Usage
 
