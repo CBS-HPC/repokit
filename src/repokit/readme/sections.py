@@ -718,9 +718,9 @@ The Repokit toolchain is split into three command-line interfaces:
 ### `repokit` (core)
 | Command | Description |
 |---------|-------------|
-| `repokit deps | Updates dependency metadata for code environment. |
-| `repokit readme | Regenerates `README.md` from project metadata/structure. |
-| `repokit templates | Regenerates language script templates. |
+| `repokit deps` | Updates dependency metadata for code environment. |
+| `repokit readme` | Regenerates `README.md` from project metadata/structure. |
+| `repokit templates` | Regenerates language script templates. |
 | `repokit ex-code` | Generates code example scripts/notebooks. |
 | `repokit tests` | Generates test examples. |
 | `repokit git` | Applies Git configuration helpers. |
