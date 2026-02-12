@@ -204,7 +204,7 @@ def set_conda_packages(
         install_packages.extend(["git"])
 
     if version_control.lower() == "datalad":
-        if not is_installed("rclone", "Rclone"):
+        if not is_installed("rclone", "Rclone", local_install=True):
             install_packages.extend(["rclone"])
 
         if os_type in ["darwin", "linux"] and not is_installed("git-annex", "git-annex"):

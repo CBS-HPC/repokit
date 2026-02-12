@@ -322,15 +322,21 @@ def set_setup(
 
     setup += f"""<details>
 
-<summary><strong>Uv Installation (Recommended)</strong></summary><br>
+<summary><strong>Uv & Pip Installation (Recommended)</strong></summary><br>
 
-If you prefer a faster and more reproducible alternative to pip, you can use **[{uv_version}](https://github.com/astral-sh/uv)** with **{py_version}** to install the dependencies.
 
 To install using `requirements.txt`:
 
+Alternatively, use **{pip_version}** directly (may be slower and less reproducible)
+
+```
+pip install -r requirements.txt
+```
+
+Recommended: Use **[{uv_version}](https://github.com/astral-sh/uv)** for faster and more reproducible installs
+
 ```
 uv pip install -r requirements.txt
-
 ```
 
 Or, if a `uv.lock` file is available and you want full reproducibility:
@@ -344,19 +350,6 @@ uv pip install --strict uv.lock
 
 """
 
-    setup += f"""<details>
-
-<summary><strong>Pip Installation:</strong></summary><br>
-
-You can install the Python dependencies using **{py_version}** and **{pip_version}** and the provided`requirements.txt`:
-
-```
-pip install -r requirements.txt
-```
-
-</details>
-
-"""
     if _has_conda(PROJECT_ROOT):
         if programming_language.lower() == "r":
             conda_title = f"Conda Installation (Installs **{py_version}** and **{software_version}**)"
@@ -377,29 +370,10 @@ conda env create -f environment.yml
 </details>
 
 """
-
-    setup += """#### Installing the `repokit` package
-
-Once you have installed the python environment, install the Repokit CLI from PyPI:
-
-```
-uv pip install repokit
-```
-
-or 
-
-```
-pip install repokit
-```
-
-This makes CLI tools such as `repokit readme`, `repokit-dmp dataset` and `repokit-backup push` available in your environment.
-
-"""
-
     if programming_language.lower() == "python":
         setup += f"""#### {software_version}
 
-The project code in `{code_path}` is written in **{software_version}** with the detected {software_version} dependencies are listed below:
+The project code in `{code_path}` has the following {software_version} dependencies detected:
 
 ```code_dependencies 
 {code_dependencies}
@@ -708,8 +682,10 @@ def set_config_table():
 
     return base_config
 
+
 def _has_conda(root):
     return (root / ".conda").exists() or (root / "environment.yml").exists()
+
 
 def _has_tests(root):
     return (root / "tests").exists() or (root / "test").exists()
