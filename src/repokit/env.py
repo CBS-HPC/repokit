@@ -152,7 +152,8 @@ def setup_conda(
         command = ["conda", "create", "--yes", "--prefix", env_path, "-c", "conda-forge"]
 
         command.extend(conda_packages)
-        msg = f'Conda environment "{repo_name}" was created successfully. The following conda packages were installed: {conda_packages}.'
+        package_list = ", ".join(map(str, conda_packages)) if conda_packages else "(none)"
+        msg = f'Conda environment "{repo_name}" was created successfully. The following conda packages were installed: {package_list}.'
 
     flag = create_conda_env(command, msg)
 

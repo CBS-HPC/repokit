@@ -157,8 +157,8 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Unexpected arguments: {extra}", file=sys.stderr)
         sys.exit(2)
 
-    #dest = Path(ns.dest).resolve() if ns.dest else PROJECT_ROOT
-    #init_agent_resources(ns.platform, dest, ns.force, guided=ns.agr_guided)
+    dest = Path(ns.dest).resolve() if ns.dest else PROJECT_ROOT
+    init_agent_resources(ns.platform, dest, ns.force, guided=ns.agr_guided)
 
 
 if __name__ == "__main__":
