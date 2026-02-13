@@ -89,7 +89,7 @@ def _copy_template_file_as(src_name: str, dest_name: str, dest: Path, force: boo
     shutil.copy2(src, target)
 
 
-def _copy_or_create_ignore_file(name: str, dest: Path, force: bool) -> None:
+def _create_ignore_file(name: str, dest: Path, force: bool) -> None:
     target = dest / name
     if target.exists() and not force:
         return
@@ -115,9 +115,9 @@ def _apply_local_templates(dest: Path, platform: str, force: bool) -> None:
     else:
         _copy_template_file("AGENTS.md", dest, force)
     _copy_template_file("TASKS.md", dest, force)
-    _copy_or_create_ignore_file(".codexignore", dest, force)
-    _copy_or_create_ignore_file(".claudeignore", dest, force)
-    _copy_or_create_ignore_file(".cursorignore", dest, force)
+    _create_ignore_file(".codexignore", dest, force)
+    _create_ignore_file(".claudeignore", dest, force)
+    _create_ignore_file(".cursorignore", dest, force)
 
     gitignore_template = TEMPLATE_DIR / ".gitignore"
     if gitignore_template.exists():
