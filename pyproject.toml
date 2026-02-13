@@ -74,6 +74,10 @@ include-package-data = true
 repokit = [
   "templates/j2/**/*",
   "templates/agent/**/*",
+  "templates/agent/.codexignore",
+  "templates/agent/.claudeignore",
+  "templates/agent/.cursorignore",
+  "templates/agent/.gitignore",
   "templates/**/*.j2",
   "templates/**/*.md",
   "templates/**/*.yaml",

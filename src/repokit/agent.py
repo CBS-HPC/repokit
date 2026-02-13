@@ -9,6 +9,16 @@ from pathlib import Path
 from repokit_common import PROJECT_ROOT
 
 TEMPLATE_DIR = Path(__file__).resolve().parent / "templates" / "agent"
+DEFAULT_AGENT_IGNORE = "\n".join(
+    [
+        "# Exclude large and generated artifacts",
+        "outputs/",
+        "results/",
+        "logs/",
+        ".venv/",
+        "",
+    ]
+)
 
 
 def _platform_dir(dest: Path, platform: str) -> Path | None:
@@ -79,6 +89,14 @@ def _copy_template_file_as(src_name: str, dest_name: str, dest: Path, force: boo
     shutil.copy2(src, target)
 
 
+def _copy_or_create_ignore_file(name: str, dest: Path, force: bool) -> None:
+    target = dest / name
+    if target.exists() and not force:
+        return
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(DEFAULT_AGENT_IGNORE, encoding="utf-8")
+
+
 def _copy_skills(dest: Path, platform: str, force: bool) -> None:
     skills_dir = TEMPLATE_DIR / "skills"
     if not skills_dir.exists():
@@ -97,9 +115,9 @@ def _apply_local_templates(dest: Path, platform: str, force: bool) -> None:
     else:
         _copy_template_file("AGENTS.md", dest, force)
     _copy_template_file("TASKS.md", dest, force)
-    _copy_template_file(".codexignore", dest, force)
-    _copy_template_file(".claudeignore", dest, force)
-    _copy_template_file(".cursorignore", dest, force)
+    _copy_or_create_ignore_file(".codexignore", dest, force)
+    _copy_or_create_ignore_file(".claudeignore", dest, force)
+    _copy_or_create_ignore_file(".cursorignore", dest, force)
 
     gitignore_template = TEMPLATE_DIR / ".gitignore"
     if gitignore_template.exists():
@@ -129,7 +147,6 @@ def init_agent_resources(platform: str, dest: Path, force: bool, guided: bool) -
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="repokit agent", description="Initialize agent resources")
-    parser.add_argument("action", choices=["init"])
     parser.add_argument("--platform", choices=["codex", "claude", "cursor"], default="codex")
     parser.add_argument("--dest", default=None)
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
@@ -140,9 +157,8 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Unexpected arguments: {extra}", file=sys.stderr)
         sys.exit(2)
 
-    dest = Path(ns.dest).resolve() if ns.dest else PROJECT_ROOT
-    if ns.action == "init":
-        init_agent_resources(ns.platform, dest, ns.force, guided=ns.agr_guided)
+    #dest = Path(ns.dest).resolve() if ns.dest else PROJECT_ROOT
+    #init_agent_resources(ns.platform, dest, ns.force, guided=ns.agr_guided)
 
 
 if __name__ == "__main__":
