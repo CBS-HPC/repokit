@@ -28,6 +28,10 @@ def _platform_dir(dest: Path, platform: str) -> Path | None:
         return dest / ".claude"
     if platform == "cursor":
         return dest / ".cursor"
+    if platform == "opencode":
+        return dest / ".opencode"
+    if platform == "copilot":
+        return dest / ".github" / "copilot"
     return None
 
 
@@ -112,12 +116,21 @@ def _apply_local_templates(dest: Path, platform: str, force: bool) -> None:
     if platform == "claude":
         # For Claude projects, use the AGENTS template content under CLAUDE.md.
         _copy_template_file_as("AGENTS.md", "CLAUDE.md", dest, force)
+    elif platform == "copilot":
+        # For GitHub Copilot, scaffold instructions in the GitHub metadata folder.
+        _copy_template_file_as("AGENTS.md", ".github/copilot-instructions.md", dest, force)
     else:
         _copy_template_file("AGENTS.md", dest, force)
     _copy_template_file("TASKS.md", dest, force)
-    _create_ignore_file(".codexignore", dest, force)
-    _create_ignore_file(".claudeignore", dest, force)
-    _create_ignore_file(".cursorignore", dest, force)
+    platform_ignore = {
+        "codex": ".codexignore",
+        "claude": ".claudeignore",
+        "cursor": ".cursorignore",
+        "opencode": ".opencodeignore",
+        "copilot": ".copilotignore",
+    }.get(platform)
+    if platform_ignore:
+        _create_ignore_file(platform_ignore, dest, force)
 
     gitignore_template = TEMPLATE_DIR / ".gitignore"
     if gitignore_template.exists():
@@ -147,7 +160,11 @@ def init_agent_resources(platform: str, dest: Path, force: bool, guided: bool) -
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="repokit agent", description="Initialize agent resources")
-    parser.add_argument("--platform", choices=["codex", "claude", "cursor"], default="codex")
+    parser.add_argument(
+        "--platform",
+        choices=["codex", "claude", "cursor", "opencode", "copilot"],
+        default="codex",
+    )
     parser.add_argument("--dest", default=None)
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
     parser.add_argument("--agr-guided", action="store_true", help="Run agr init -i after scaffolding")
