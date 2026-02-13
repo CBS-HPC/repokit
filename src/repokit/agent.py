@@ -68,6 +68,17 @@ def _copy_template_file(name: str, dest: Path, force: bool) -> None:
     shutil.copy2(src, target)
 
 
+def _copy_template_file_as(src_name: str, dest_name: str, dest: Path, force: bool) -> None:
+    src = TEMPLATE_DIR / src_name
+    if not src.exists():
+        return
+    target = dest / dest_name
+    if target.exists() and not force:
+        return
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, target)
+
+
 def _copy_skills(dest: Path, platform: str, force: bool) -> None:
     skills_dir = TEMPLATE_DIR / "skills"
     if not skills_dir.exists():
@@ -80,14 +91,15 @@ def _apply_local_templates(dest: Path, platform: str, force: bool) -> None:
     if platform_root:
         platform_root.mkdir(parents=True, exist_ok=True)
 
-    _copy_template_file("AGENTS.md", dest, force)
+    if platform == "claude":
+        # For Claude projects, use the AGENTS template content under CLAUDE.md.
+        _copy_template_file_as("AGENTS.md", "CLAUDE.md", dest, force)
+    else:
+        _copy_template_file("AGENTS.md", dest, force)
     _copy_template_file("TASKS.md", dest, force)
     _copy_template_file(".codexignore", dest, force)
     _copy_template_file(".claudeignore", dest, force)
     _copy_template_file(".cursorignore", dest, force)
-
-    if platform == "claude":
-        _copy_template_file("CLAUDE.md", dest, force)
 
     gitignore_template = TEMPLATE_DIR / ".gitignore"
     if gitignore_template.exists():

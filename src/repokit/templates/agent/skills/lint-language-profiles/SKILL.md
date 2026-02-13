@@ -5,6 +5,14 @@ description: Apply language-aware lint profiles for Python, R, Stata, and MATLAB
 
 # lint-language-profiles
 
+## Skill dependencies
+- `activate_project`: resolve language, environment, and toolchain before selecting profiles.
+
+## Pre-checks
+- Parse `pyproject.toml` for configured language, environment manager, and lint/test tool preferences.
+- Detect code and environment markers (`src/`, `R/`, `*.do`, `*.m`, `.venv/`, `.conda/`, `uv.lock`, `environment.yml`, `renv.lock`, `DESCRIPTION`).
+- Run only profiles relevant to detected/configured languages.
+
 ## Python
 - ruff check .
 - ruff format --check .

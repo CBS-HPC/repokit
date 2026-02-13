@@ -5,16 +5,21 @@ description: Run lint/type/test checks, auto-fix safe issues, and iterate until 
 
 # project-hygiene
 
+## Skill dependencies
+- `activate_project`: resolve project execution profile first.
+- `lint-language-profiles`: source of truth for language-specific lint/type/test commands.
+
+## Pre-checks
+- Parse `pyproject.toml` for selected language, environment manager, and configured checks.
+- Detect environment markers (`.venv/`, `.conda/`, `uv.lock`, `environment.yml`, `renv.lock`) and code layout (`src/`, `R/`, `*.do`, `*.m`).
+- Use `lint-language-profiles` for language-specific check selection before running fixes.
+
 ## Workflow
 1. Run baseline checks:
-   - repokit lint
-   - ruff check .
-   - ruff format --check .
-   - mypy src
-   - pytest
+   - Run `repokit lint` when configured/available.
+   - Run language-appropriate lint/type/test checks from `lint-language-profiles`.
 2. Apply safe fixes:
-   - ruff check --fix .
-   - ruff format .
+   - Apply tool-native safe auto-fixes only for active languages/toolchains.
 3. Re-run all checks.
 
 ## Completion
