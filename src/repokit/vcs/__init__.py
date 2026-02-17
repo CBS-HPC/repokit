@@ -40,6 +40,29 @@ from .dvc_w import install_dvc, dvc_init, dvc_deic_storage, dvc_local_storage, s
 DEFAULT_DATASET_PATH, _ = toml_dataset_path()
 
 
+def _ensure_data_repo_gitignore(ignore_entries: tuple[str, ...] = ("/sensitive", "/proprietary")) -> None:
+    """
+    Ensure a local .gitignore exists in the data repo root and includes
+    sensitive/proprietary folders.
+    """
+    gitignore = pathlib.Path(".gitignore")
+    existing_lines: list[str] = []
+    if gitignore.exists():
+        existing_lines = gitignore.read_text(encoding="utf-8").splitlines()
+
+    # Keep file stable and avoid duplicate entries.
+    line_set = set(existing_lines)
+    updated = list(existing_lines)
+    for entry in ignore_entries:
+        if entry not in line_set:
+            updated.append(entry)
+            line_set.add(entry)
+
+    if updated != existing_lines:
+        content = "\n".join(updated).rstrip() + "\n"
+        gitignore.write_text(content, encoding="utf-8")
+
+
 # Setup functions
 def setup_version_control(version_control, remote_storage, code_repo, repo_name):
     """Handle repository creation and log-in based on selected platform."""
@@ -68,6 +91,7 @@ def setup_git(version_control, code_repo):
             # Creating its own git repo for "data"
             if version_control.lower() == "git" and flag:
                 with change_dir(str(DEFAULT_DATASET_PATH["parent_path"])):
+                    _ensure_data_repo_gitignore()
                     flag = git_init(
                         msg="Initial commit - /data git repo", branch_name="data", path=os.getcwd()
                     )
