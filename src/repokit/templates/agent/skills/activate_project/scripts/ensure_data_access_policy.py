@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import datetime as dt
 import re
 from pathlib import Path
@@ -9,9 +9,9 @@ except Exception as exc:  # pragma: no cover
     raise SystemExit(f"tomllib is required: {exc}")
 
 
-SECTION_HEADER = "[tool.data_access]"
-BEGIN_MARKER = "# BEGIN tool.data_access (auto-managed)"
-END_MARKER = "# END tool.data_access (auto-managed)"
+SECTION_HEADER = "[tool.data_policy]"
+BEGIN_MARKER = "# BEGIN tool.data_policy (auto-managed)"
+END_MARKER = "# END tool.data_policy (auto-managed)"
 
 
 def yes_no(prompt: str, default: bool = True) -> bool:
@@ -83,15 +83,15 @@ def load_pyproject(pyproject_path: Path) -> tuple[dict, str]:
     return data, text
 
 
-def get_existing_data_access(data: dict) -> dict | None:
+def get_existing_data_policy(data: dict) -> dict | None:
     tool = data.get("tool")
     if not isinstance(tool, dict):
         return None
-    access = tool.get("data_access")
+    access = tool.get("data_policy")
     return access if isinstance(access, dict) else None
 
 
-def render_data_access_section(
+def render_data_policy_section(
     sensitive_paths: list[str],
     agent_mode: str = "metadata-only",
 ) -> str:
@@ -122,9 +122,9 @@ def render_data_access_section(
     return "\n".join(lines)
 
 
-def upsert_data_access_section(pyproject_text: str, section_text: str) -> str:
+def upsert_data_policy_section(pyproject_text: str, section_text: str) -> str:
     pattern = re.compile(
-        r"(?ms)^\[tool\.data_access\]\n.*?(?=^\[.*\]|\Z)"
+        r"(?ms)^\[tool\.data_policy\]\n.*?(?=^\[.*\]|\Z)"
     )
     if pattern.search(pyproject_text):
         updated = pattern.sub(section_text, pyproject_text).rstrip() + "\n"
@@ -133,7 +133,7 @@ def upsert_data_access_section(pyproject_text: str, section_text: str) -> str:
 
 
 def extract_sensitive_paths(data: dict) -> list[str]:
-    access = get_existing_data_access(data)
+    access = get_existing_data_policy(data)
     if not access:
         return []
     raw = access.get("sensitive_paths")
@@ -172,13 +172,13 @@ def main() -> None:
         raise SystemExit("pyproject.toml not found in current directory.")
 
     data, text = load_pyproject(pyproject)
-    existing = get_existing_data_access(data)
+    existing = get_existing_data_policy(data)
 
     if existing is None:
-        print("[tool.data_access] is not defined.")
+        print("[tool.data_policy] is not defined.")
         sensitive = prompt_sensitive_paths(root)
     else:
-        print("Existing [tool.data_access] detected.")
+        print("Existing [tool.data_policy] detected.")
         current = extract_sensitive_paths(data)
         print("Current sensitive paths:", current if current else "[]")
         if yes_no("Is this data access policy still correct?", default=True):
@@ -188,17 +188,19 @@ def main() -> None:
 
     if sensitive:
         print("\nDefaulting agent_data_access to 'metadata-only' for sensitive content.")
-    section = render_data_access_section(sensitive_paths=sensitive, agent_mode="metadata-only")
-    updated = upsert_data_access_section(text, section)
+    section = render_data_policy_section(sensitive_paths=sensitive, agent_mode="metadata-only")
+    updated = upsert_data_policy_section(text, section)
     pyproject.write_text(updated, encoding="utf-8")
 
     update_ignore_file(root / ".codexignore", sensitive)
     update_ignore_file(root / ".claudeignore", sensitive)
     update_ignore_file(root / ".cursorignore", sensitive)
 
-    print("Updated pyproject.toml [tool.data_access].")
+    print("Updated pyproject.toml [tool.data_policy].")
     print("Synced sensitive paths to .codexignore, .claudeignore, and .cursorignore.")
 
 
 if __name__ == "__main__":
     main()
+
+

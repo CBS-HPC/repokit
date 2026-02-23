@@ -1,4 +1,4 @@
----
+﻿---
 name: activate_project
 description: Initialize project execution context by reading README and pyproject.toml, detecting language/toolchain/version-control markers, and selecting the correct environment before any task.
 ---
@@ -13,7 +13,7 @@ description: Initialize project execution context by reading README and pyprojec
 ## Data access bootstrap (first step)
 - Run `python skills/activate_project/scripts/ensure_data_access_policy.py` before broad file reads.
 - Behavior:
-  - If `[tool.data_access]` is missing in `pyproject.toml`, prompt user to select sensitive/proprietary top-level directories and write policy.
+  - If `[tool.data_policy]` is missing in `pyproject.toml`, prompt user to select sensitive/proprietary top-level directories and write policy.
   - Sync selected sensitive paths to `.codexignore`, `.claudeignore`, and `.cursorignore`.
   - On later runs, ask whether existing policy is still correct; if not, reconfigure and rewrite.
   - Apply this consistently for Codex/Claude/Cursor agent setups (`.codex`, `.claude`, `.cursor`).
@@ -40,8 +40,9 @@ description: Initialize project execution context by reading README and pyprojec
 5. Report resolved profile before making changes (language, env, toolchain, VC mode, key paths).
 
 ## Verify
-- Data access policy exists in `pyproject.toml` under `[tool.data_access]`.
+- Data access policy exists in `pyproject.toml` under `[tool.data_policy]`.
 - Sensitive paths from policy are present in `.codexignore`, `.claudeignore`, and `.cursorignore`.
 - Chosen commands match `pyproject.toml` and detected markers.
 - Any config-vs-filesystem mismatch is explicitly reported.
 - Downstream skills use this resolved profile.
+

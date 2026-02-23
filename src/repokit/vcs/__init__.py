@@ -63,6 +63,27 @@ def _ensure_data_repo_gitignore(ignore_entries: tuple[str, ...] = ("/sensitive",
         gitignore.write_text(content, encoding="utf-8")
 
 
+def _deactivate_data_ignore_line(line: str) -> str:
+    """
+    Comment out broad data ignore rules while preserving explicit
+    sensitive/proprietary ignores.
+    """
+    stripped = line.strip()
+    norm = stripped.lstrip("/")
+    keep_active = {
+        "data/sensitive/",
+        "data/proprietary/",
+        "data/sensitive/*",
+        "data/proprietary/*",
+    }
+
+    if norm in keep_active:
+        return line
+    if norm.startswith("data/"):
+        return line.replace("data/", "#data/", 1)
+    return line
+
+
 # Setup functions
 def setup_version_control(version_control, remote_storage, code_repo, repo_name):
     """Handle repository creation and log-in based on selected platform."""
@@ -118,9 +139,7 @@ def setup_dvc(version_control, remote_storage, code_repo, repo_name):
     gitignore = pathlib.Path(PROJECT_ROOT / ".gitignore")
     if gitignore.exists():
         lines = gitignore.read_text().splitlines()
-        new_lines = [
-            line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines
-        ]
+        new_lines = [_deactivate_data_ignore_line(line) for line in lines]
         gitignore.write_text("\n".join(new_lines) + "\n")
 
     dvc_init(remote_storage, code_repo, repo_name)
@@ -145,9 +164,7 @@ def setup_datalad(version_control, remote_storage, code_repo, repo_name):
     gitignore = pathlib.Path(PROJECT_ROOT / ".gitignore")
     if gitignore.exists():
         lines = gitignore.read_text().splitlines()
-        new_lines = [
-            line.replace("data/", "#data/") if line.startswith("data/") else line for line in lines
-        ]
+        new_lines = [_deactivate_data_ignore_line(line) for line in lines]
         gitignore.write_text("\n".join(new_lines) + "\n")
 
     # Create datalad dataset

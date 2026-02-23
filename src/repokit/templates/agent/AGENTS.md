@@ -1,4 +1,4 @@
----
+﻿---
 purpose: "Primary agent memory file for Repokit"
 version: 1.0.0
 status: template
@@ -19,17 +19,17 @@ In practice, this means:
 - Follow project configuration (`pyproject.toml`) and documented intent (`README`) instead of assumptions.
 - Leave the project in a better state: checks run, metadata synced, and decisions documented.
 
-## Start here (every task)
+## Session start (once per session)
 
-1. Run `activate_project` skill first.
-2. Confirm data access policy first (`[tool.data_access]`):
+1. Confirm data access policy first (`[tool.data_policy]`):
    - if missing, define it before any broad file access
-   - sync sensitive paths into `.codexignore`, `.claudeignore`, and `.cursorignore`
+   - sync sensitive paths into the active platform ignore file (`.codexignore`, `.claudeignore`, `.cursorignore`, `.opencodeignore`, or `.copilotignore`)
    - on later activations, ask if policy is still correct
-3. Read `README` and `pyproject.toml` only after data access policy is confirmed.
-4. Use detected config + repo markers to choose tools:
+2. Read `README` and `pyproject.toml` after data access policy is confirmed.
+3. Use detected config + repo markers to choose tools:
    - markers: `.venv/`, `.conda/`, `uv.lock`, `environment.yml`, `renv.lock`, `DESCRIPTION`, `.git/`, `.dvc/`, `.datalad/`
-5. If config and files conflict, follow `pyproject.toml` and report the mismatch.
+4. If config and files conflict, prefer `pyproject.toml`, report the mismatch, and confirm whether to reconcile config or code.
+5. For each task, re-confirm data policy only if scope changes (new directories, new datasets, or new sensitive paths).
 
 ## Use skills
 
@@ -51,9 +51,10 @@ Skills are in `skills/<name>/SKILL.md`.
 
 Dependency rule:
 - Keep dependencies one-way. `activate_project` is the root skill.
+- Assume `activate_project` is done at session start; re-run it only if scope/config changes.
 
 Quick skill chooser:
-- Starting any task: `activate_project`
+- If session is not initialized or scope changed: `activate_project`
 - Writing/changing behavior: `test-driven-development` + `lint-language-profiles`
 - Cleaning and validating code: `project-hygiene`
 - CI updates: `ci-governance`
@@ -114,3 +115,4 @@ FAIR/RDM quick check (when relevant):
 - Validation: what was run and result.
 - Config sync: which `pyproject.toml` sections were updated.
 - Risks/follow-ups: open issues or next actions.
+

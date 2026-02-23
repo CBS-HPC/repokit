@@ -1,4 +1,4 @@
----
+﻿---
 name: workflow-provenance-run
 description: Draft skill for running end-to-end project workflows with provenance capture, preferring datalad or dvc when available.
 ---
@@ -17,7 +17,7 @@ description: Draft skill for running end-to-end project workflows with provenanc
 
 ## Preconditions
 - Run `activate_project` first.
-- Respect `[tool.data_access]` policy and ignore files before touching data paths.
+- Respect `[tool.data_policy]` policy and ignore files before touching data paths.
 - Use non-interactive command paths.
 
 ## Entrypoint detection (default order)
@@ -72,3 +72,4 @@ description: Draft skill for running end-to-end project workflows with provenanc
   - what changed
   - rationale
   - open questions
+
