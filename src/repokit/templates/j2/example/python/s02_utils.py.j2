@@ -5,9 +5,9 @@ def get_paths():
     base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     return {
         "base": base_path,
-        "raw": os.path.join(base_path, "data", "00_raw"),
-        "interim": os.path.join(base_path, "data", "01_interim"),
-        "processed": os.path.join(base_path, "data", "02_processed"),
+        "raw": os.path.join(base_path, "data", "raw"),
+        "interim": os.path.join(base_path, "data", "interim"),
+        "processed": os.path.join(base_path, "data", "processed"),
         "figures": os.path.join(base_path, "results", "figures")
     }
 
@@ -35,3 +35,4 @@ def z_score(values):
     mean = compute_mean(values)
     std = (sum([(x - mean) ** 2 for x in values]) / len(values)) ** 0.5
     return [(x - mean) / std for x in values] if std != 0 else [0 for _ in values]
+

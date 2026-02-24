@@ -63,6 +63,9 @@ dev = [
   "mypy>=1.10",
   "uv",
 ]
+gpu = [
+  "torch",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,4 +1,4 @@
-﻿import fnmatch
+import fnmatch
 import os
 import pathlib
 import platform
@@ -672,7 +672,7 @@ def set_config_table():
 |---------------------------|----------------------------------------------------------------------------------------------|
 | `[project]`               | Declares the base project metadata for Python tooling (name, version, dependencies, etc.).   |
 | `[tool.uv]`               | Placeholder for settings related to the uv package manager (currently unused).               |
-| `[tool.cookiecutter]`     | Stores project template metadata (e.g., author, licenses, language) for reproducibility and scaffolding. |
+| `[tool.cookiecutter]`     | Stores project template metadata (e.g., author, language) for reproducibility and scaffolding. |
 | `[tool.rcloneignore]`     | Defines file patterns to ignore when syncing with remote tools like Rclone.                  |
 | `[tool.treeignore]`       | Specifies which files and folders to exclude from directory tree visualizations.             |
 | `[tool.platform_rules]`   | Maps Python packages to operating systems for conditional installations.                     |

@@ -1,4 +1,4 @@
-﻿"""CLI entrypoint for repokit-only commands."""
+"""CLI entrypoint for repokit-only commands."""
 from __future__ import annotations
 
 import argparse

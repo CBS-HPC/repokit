@@ -1,4 +1,4 @@
-﻿---
+---
 name: ci-governance
 description: Keep CI aligned with project language and version-control mode, and enforce reproducibility checks.
 ---

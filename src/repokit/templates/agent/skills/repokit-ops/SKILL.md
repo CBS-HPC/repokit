@@ -1,4 +1,4 @@
-﻿---
+---
 name: repokit-ops
 description: Run core repokit CLI workflows with verification steps for dependencies, README sync, templates, and CI toggles.
 ---
