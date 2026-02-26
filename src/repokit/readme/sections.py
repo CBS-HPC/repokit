@@ -1,4 +1,4 @@
-﻿import fnmatch
+import fnmatch
 import os
 import pathlib
 import platform
@@ -97,12 +97,12 @@ def main_text(json_file, code_path):
 
     system_spec = set_specs()
 
-    ci_section = _set_ci(programming_language, code_repo)
+    ci_section = set_ci(programming_language, code_repo)
 
     unit_tests = set_unit_tests(programming_language)
 
     unit_tests_block = ""
-    if _has_tests(PROJECT_ROOT) and unit_tests.strip():
+    if has_tests(PROJECT_ROOT) and unit_tests.strip():
         unit_tests_block = (
             "<details>\n\n"
             "<summary><strong>Unit Testing</strong></summary><br>\n\n"
@@ -112,7 +112,7 @@ def main_text(json_file, code_path):
 
 
     ci_block = ""
-    if _has_ci(PROJECT_ROOT) and ci_section.strip():
+    if has_ci(PROJECT_ROOT) and ci_section.strip():
         ci_block = (
             "<details>\n\n"
             "<summary><strong>Continuous Integration (CI)</strong></summary><br>\n\n"
@@ -312,7 +312,7 @@ def set_setup(
     else:
         setup += f"Project `repokit` environment using **{py_version}** can be setup using the options described below.\n\n"
 
-    if _has_conda(PROJECT_ROOT):
+    if has_conda(PROJECT_ROOT):
         setup += f">Only the **Conda** will install **{py_version}** along with its dependencies. For pip and uv installation methods, **{py_version}** must already be installed on your system.\n\n"
 
     if programming_language.lower() in ["matlab", "stata", "sas"]:
@@ -350,7 +350,7 @@ uv pip install --strict uv.lock
 
 """
 
-    if _has_conda(PROJECT_ROOT):
+    if has_conda(PROJECT_ROOT):
         if programming_language.lower() == "r":
             conda_title = f"Conda Installation (Installs **{py_version}** and **{software_version}**)"
 
@@ -683,21 +683,10 @@ def set_config_table():
     return base_config
 
 
-def _has_conda(root):
-    return (root / ".conda").exists() or (root / "environment.yml").exists()
 
 
-def _has_tests(root):
-    return (root / "tests").exists() or (root / "test").exists()
 
 
-def _has_ci(root):
-    return (
-        (root / ".github" / "workflows").exists()
-        or (root / ".gitlab-ci.yml").exists()
-        or (root / ".woodpecker.yml").exists()
-        or (root / ".woodpecker").exists()
-    )
 
 
 def _set_cli():
@@ -772,282 +761,8 @@ A full CLI walkthrough is maintained in the project README section for CLI tools
     return cli_section
 
 
-def set_unit_tests(programming_language: str) -> str:
-    lang_info = {
-        "python": {
-            "test_framework": "`pytest`",
-            "code_folder": "`src/`",
-            "test_folder": "`tests/`",
-            "test_format": "`test_*.py`",
-            "package_file": "`requirements.txt`",
-            "example": """**Example layout:**
 
-```
 
-src/s00_main.py
-
-tests/test_s00_main.py
-
-```
-
-**Run tests:**
-
-```
-
-pytest
-
-```
-
-""",
-        },
-        "r": {
-            "test_framework": "`testthat`",
-            "code_folder": "`R/`",
-            "test_folder": "`tests/testthat/`",
-            "test_format": "`test-*.R`",
-            "package_file": "`renv.lock`",
-            "example": """**Example layout:**
-
-```
-
-R/s00_main.R
-
-tests/testthat/test-s00_main.R
-
-```
-
-**Run tests:**
-
-```
-
-testthat::test_dir("tests/testthat")
-
-```
-
-**From command line:**
-
-```
-
-Rscript -e 'testthat::test_dir("tests/testthat")'
-
-```
-
-""",
-        },
-        "matlab": {
-            "test_framework": "`matlab.unittest`",
-            "code_folder": "`src/`",
-            "test_folder": "`tests/`",
-            "test_format": "`test_*.m`",
-            "package_file": "",
-            "example": """**Example layout:**
-
-```
-
-src/s00_main.m
-
-tests/test_s00_main.m
-
-```
-
-**Run tests in MATLAB:**
-
-```
-
-results = runtests('tests');
-
-assert(all([results.Passed]), 'Some tests failed')
-
-```
-
-**From command line:**
-
-```
-
-matlab -batch "results = runtests('tests'); assert(all([results.Passed]), 'Some tests failed')"
-
-```
-
-""",
-        },
-        "stata": {
-            "test_framework": "`.do` script-based",
-            "code_folder": "`stata/do/`",
-            "test_folder": "`tests/`",
-            "test_format": "`test_*.do`",
-            "package_file": "",
-            "example": """**Example layout:**
-
-```
-
-stata/do/s00_main.do
-
-tests/test_s00_main.do
-
-```
-
-**Run tests in Stata:**
-
-```
-
-do tests/test_s00_main.do
-
-```
-
-**From command line:**
-
-```
-
-stata -b do tests/test_s00_main.do
-
-```
-
-""",
-        },
-    }
-
-    if programming_language.lower() not in lang_info:
-        return f"Unsupported language: {programming_language}"
-
-    lang = lang_info[programming_language.lower()]
-
-    folder_path = PROJECT_ROOT / pathlib.Path(lang["test_folder"].replace("`", ""))
-
-    md = f"""
-
-This template includes built-in support for **unit testing** in {programming_language.capitalize()} to promote research reliability and reproducibility.
-| Language | Test Framework     | Code Folder | Test Folder       | Test File Format |
-| -------- | ------------------ | ----------- | ----------------- | ---------------- |
-| {programming_language.capitalize()}   | {lang["test_framework"]} | {lang["code_folder"]} | {lang["test_folder"]} | {lang["test_format"]} |
-
-{lang["example"]}
-
-""".strip()
-
-    if not folder_path.exists():
-        md += f"Test folder not found: `{lang['test_folder']}`"
-
-    else:
-        # Filter test scripts based on naming convention
-
-        test_pattern = lang["test_format"].replace("`", "")
-
-        test_scripts = [
-            file for file in os.listdir(str(folder_path)) if fnmatch.fnmatch(file, test_pattern)
-        ]
-
-        if not test_scripts:
-            md += f"\n\n No valid test scripts were detected in `{lang['test_folder']}`.\nMake sure test files follow the expected format: `{lang['test_format']}`"
-
-        else:
-            md += f"\n\nThe following test scripts were detected in `{lang['test_folder']}`:\n"
-
-            for name in test_scripts:
-                md += f"- **{name}**\n"
-
-    return md
-
-
-def _set_ci(programming_language: str, code_repo: str) -> str:
-    ci_matrix = {
-        "github": {
-            "supports": ["python", "r", "matlab"],
-            "config_file": ".github/workflows/ci.yml",
-            "note": "",
-        },
-        "gitlab": {
-            "supports": ["python", "r", "matlab"],
-            "config_file": ".gitlab-ci.yml",
-            "note": "",
-        },
-        "codeberg": {
-            "supports": ["python", "r"],
-            "config_file": ".woodpecker.yml",
-            "note": """ No support for MATLAB or cross-platform testing.  
-
-CI is not enabled by default – to activate CI for your repository, you must [submit a request](https://codeberg.org/Codeberg-e.V./requests/issues/new?template=ISSUE_TEMPLATE%2fWoodpecker-CI.yaml).  
-
-More information: [Codeberg CI docs](https://docs.codeberg.org/ci/)""",
-        },
-    }
-
-    lang_info = {
-        "python": {"package_file": "`requirements.txt`"},
-        "r": {"package_file": "`renv.lock`"},
-        "matlab": {"package_file": ""},
-        "stata": {"package_file": ""},
-    }
-
-    if programming_language.lower() not in lang_info:
-        return f"Unsupported language: {programming_language}"
-
-    if code_repo.lower() not in ci_matrix:
-        return f"Unsupported code repository: {code_repo}"
-
-    if programming_language.lower() not in ci_matrix[code_repo.lower()]["supports"]:
-        return f"{programming_language.capitalize()} is not supported on {code_repo.capitalize()}."
-
-    lang = lang_info[programming_language.lower()]
-
-    ci = ci_matrix[code_repo.lower()]
-
-    if lang["package_file"]:
-        pipeline = f"""##### Each pipeline:
-
-1. Installs language runtime and dependencies  
-
-2. Installs project packages using {lang["package_file"]}  
-
-3. Runs tests in `tests/`  
-
-4. Outputs results and logs"""
-
-    else:
-        pipeline = """##### Each pipeline:
-
-1. Installs language runtime and dependencies  
-
-2. Runs tests in `tests/`  
-
-3. Outputs results and logs"""
-
-    config_file = PROJECT_ROOT / pathlib.Path(ci["config_file"])
-
-    md = f"""
-
-CI is configured for **{code_repo.capitalize()}** (`{ci["config_file"]}`) with **{programming_language.capitalize()}** support.
-
-Even without writing **unit tests**, the default CI configuration will still verify that your project environment installs correctly across platforms (e.g., Linux, Windows, macOS). This provides early detection of broken dependencies, incompatible packages, or missing setup steps — critical for collaboration and long-term reproducibility.
-
-##### CI Control via CLI
-
-CI can be toggled on or off using the built-in CLI command:
-
-```
-
-ci --on
-
-ci --off 
-
-```
-
-{pipeline}
-
-{ci["note"]}
-
-##### Git Shortcut for Skipping CI
-
-To skip CI on a commit, use the built-in Git alias:
-
-```
-
-git commit-skip "Updated documentation"
-
-```
-
-""".strip()
-
-    return md
 
 
 def set_dcas():
