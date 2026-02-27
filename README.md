@@ -11,9 +11,27 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 
 ## Installation
 
+> Note: `repokit` is not published on PyPI yet. Use local wheel/source installation for now.
+
+Install from PyPI:
+
 ```bash
 pip install repokit
 ```
+
+Install from local wheel files (`/dist`):
+
+```bash
+# 1) Install dependency wheels first
+pip install ../repokit-common/dist/repokit_common-*.whl
+pip install ../repokit-backup/dist/repokit_backup-*.whl
+pip install ../repokit-dmp/dist/repokit_dmp-*.whl
+
+# 2) Install repokit wheel
+pip install ./dist/repokit-*.whl
+```
+
+If you are installing into a fresh virtual environment, install in this order so local dependencies are available before `repokit`.
 
 From source:
 
