@@ -11,13 +11,7 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 
 ## Installation
 
-> Note: `repokit` is not published on PyPI yet. Use local wheel/source installation for now.
-
-Install from PyPI:
-
-```bash
-pip install repokit
-```
+`repokit` is not published on PyPI yet. Use local wheel/source installation.
 
 Install from local wheel files (`/dist`):
 
@@ -120,7 +114,7 @@ This helps maintain a professional and standardized `README.md` that aligns with
 #### Usage
 
 ```bash
-repokit readme-update
+repokit readme
 ```
 
 #### What it does
@@ -165,7 +159,7 @@ repokit ex-code
 - Saves outputs in the appropriate `./src/`, `R/`, `stata/do/`, etc.
 - Calls:
   - `get_dependencies` to update `dependencies.txt`
-  - `repokit readme-update` to regenerate project metadata
+  - `repokit readme` to regenerate project metadata
 
 > Uses templates from `repokit/templates/j2/example` inside the package.
 > Script locations depend on your selected programming language.
