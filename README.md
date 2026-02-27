@@ -23,15 +23,16 @@ Install from local wheel files (`/dist`):
 
 ```bash
 # 1) Install dependency wheels first
-pip install ../repokit-common/dist/repokit_common-*.whl
-pip install ../repokit-backup/dist/repokit_backup-*.whl
-pip install ../repokit-dmp/dist/repokit_dmp-*.whl
+pip install https://github.com/CBS-HPC/repokit-common/raw/main/dist/repokit_common-0.1-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-backup/raw/main/dist/repokit_backup-0.1-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-dmp/raw/main/dist/repokit_dmp-0.1-py3-none-any.whl
 
 # 2) Install repokit wheel
-pip install ./dist/repokit-*.whl
+pip install https://github.com/CBS-HPC/repokit/raw/main/dist/repokit-0.1-py3-none-any.whl
 ```
 
 If you are installing into a fresh virtual environment, install in this order so local dependencies are available before `repokit`.
+Wheel filenames include version tags and may change over time.
 
 From source:
 
