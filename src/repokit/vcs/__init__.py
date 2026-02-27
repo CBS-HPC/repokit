@@ -32,8 +32,8 @@ from .datalad_w import (
     datalad_deic_storage,
     install_git_annex_remote_rclone,
     set_datalad,
-    datalad_cleaning,
 )
+from .cleanup import datalad_cleaning
 from .dvc_w import install_dvc, dvc_init, dvc_deic_storage, dvc_local_storage, set_dvc, dvc_cleaning
 
 

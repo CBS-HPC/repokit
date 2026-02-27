@@ -481,17 +481,6 @@ def set_datalad(path: str | os.PathLike) -> bool:
     return changed
 
 
-def datalad_cleaning(project_root: str | os.PathLike = ".") -> list[str]:
-    """
-    Compatibility cleaning hook for DataLad mode.
-
-    Current behavior is intentionally conservative: no destructive cleanup is
-    performed automatically for DataLad-tracked content.
-    """
-    root = pathlib.Path(project_root).resolve()
-    if not (root / ".datalad").exists():
-        return []
-    return []
 
 
 
