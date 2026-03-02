@@ -10,6 +10,8 @@ import psutil
 import re
 from typing import Iterable, List, Union, Optional
 from repokit_common import PROJECT_ROOT, get_version, language_dirs, load_from_env, read_toml
+from .ci import set_ci, set_unit_tests
+from .runtime import has_ci, has_conda, has_tests
 
 extension_map = {
     "r": (".R", ".Rmd"),

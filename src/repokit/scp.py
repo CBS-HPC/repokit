@@ -13,6 +13,8 @@ from repokit_common import (
 
 from .backup import set_host_port, _ensure_repo_suffix
 
+DEFAULT_TIMEOUT = 600  # seconds
+
 
 def scp_push(
     remote_name: str,

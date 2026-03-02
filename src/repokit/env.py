@@ -1,9 +1,11 @@
 import os
 import pathlib
+import platform
 import shutil
 import subprocess
 import sys
 import urllib.request
+import yaml
 
 # Allow loading repokit_common from the submodule path before installation.
 _EXT_COMMON = pathlib.Path(__file__).resolve().parents[2] / "external" / "repokit-common" / "src"
