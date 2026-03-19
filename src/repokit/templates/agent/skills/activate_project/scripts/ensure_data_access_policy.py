@@ -1,12 +1,19 @@
 ﻿#!/usr/bin/env python3
 import datetime as dt
 import re
+import sys
 from pathlib import Path
 
-try:
-    import tomllib
-except Exception as exc:  # pragma: no cover
-    raise SystemExit(f"tomllib is required: {exc}")
+if sys.version_info < (3, 11):
+    try:
+        import toml as tomllib
+    except Exception as exc:  # pragma: no cover
+        raise SystemExit(f"toml is required on Python < 3.11: {exc}") from exc
+else:
+    try:
+        import tomllib
+    except Exception as exc:  # pragma: no cover
+        raise SystemExit(f"tomllib is required: {exc}") from exc
 
 
 SECTION_HEADER = "[tool.data_policy]"
