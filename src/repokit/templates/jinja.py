@@ -28,7 +28,7 @@ def patch_jinja_templates(template_folder: str):
         content = content.replace("END_RAW_MARKER", "endraw").replace("RAW_MARKER", "raw")
 
         if content != original:
-            print(f"✅ Patched: {file}")
+            print(f"[INFO] Patched: {file}")
             with open(file, "w", encoding="utf-8") as f:
                 f.write(content)
 

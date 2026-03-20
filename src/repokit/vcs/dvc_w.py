@@ -46,9 +46,9 @@ def install_dvc():
             print("DVC has been installed successfully via uv.")
             return True
         else:
-            print("uv-based install did not result in a working DVC; trying pip fallback…")
+            print("uv-based install did not result in a working DVC; trying pip fallback...")
     else:
-        print("uv not available; trying pip fallback…")
+        print("uv not available; trying pip fallback...")
 
     # 2) Fallback: regular pip install
     ok, _ = _run("pip install dvc", [sys.executable, "-m", "pip", "install", "dvc"])

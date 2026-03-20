@@ -310,7 +310,7 @@ def git_push(flag: str, msg: str = "", path: str = None):
                     subprocess.run(["git", "push", "--all"], check=True, cwd=path)
                     print("Pushed all branches to origin.")
         else:
-            print("No commit created — nothing to push.")
+            print("No commit created - nothing to push.")
 
             return True
     except subprocess.CalledProcessError as e:

@@ -256,7 +256,7 @@ def create_tree(readme_file=None, ignore_list=None, file_descriptions=None, root
                 break
 
         if start_index is None:
-            print("❌ Could not find ```tree code block. No changes made.")
+            print("[ERROR] Could not find ```tree code block. No changes made.")
             return
 
         # Step 2: Find the closing ```
@@ -266,7 +266,7 @@ def create_tree(readme_file=None, ignore_list=None, file_descriptions=None, root
                 break
 
         if end_index is None:
-            print("❌ No closing ``` found for the tree block. No changes made.")
+            print("[ERROR] No closing ``` found for the tree block. No changes made.")
             return
 
         # Step 4: Generate the updated tree structure
@@ -288,7 +288,7 @@ def create_tree(readme_file=None, ignore_list=None, file_descriptions=None, root
         with open(readme_file, "w", encoding="utf-8") as file:
             file.writelines(updated_content)
 
-        print("✅ README updated with new project directory tree.")
+        print("[INFO] README updated with new project directory tree.")
 
     if not readme_file:
         readme_file = "README.md"
@@ -617,7 +617,7 @@ def update_requirements(programming_language, readme_file):
                     )
                 else:
                     print(
-                        "❌ Could not find closing ``` after ```code_dependencies. No changes made."
+                        "[ERROR] Could not find closing ``` after ```code_dependencies. No changes made."
                     )
                     return
             else:
