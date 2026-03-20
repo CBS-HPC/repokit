@@ -1,4 +1,4 @@
-import ast
+﻿import ast
 import importlib
 import os
 import pathlib
@@ -71,7 +71,7 @@ def create_requirements_txt(
     # --- 1) pip freeze ---
     result = subprocess.run([sys.executable, "-m", "pip", "freeze"], capture_output=True, text=True)
     if result.returncode != 0:
-        print("❌ Error running pip freeze:", result.stderr)
+        print("[ERROR] Error running pip freeze:", result.stderr)
         return
 
     frozen_lines = result.stdout.strip().splitlines()
@@ -87,7 +87,7 @@ def create_requirements_txt(
     # --- 3) Write requirements.txt from filtered lines ---
     with open(requirements_path, "w", encoding="utf-8") as f:
         f.write("\n".join(filtered_lines) + ("\n" if filtered_lines else ""))
-    print("📄 requirements.txt created (filtered).")
+    print("[INFO] requirements.txt created (filtered).")
 
     # --- 4) Parse uv.lock and collect already-locked packages ---
     locked_pkgs = set()
@@ -99,7 +99,7 @@ def create_requirements_txt(
                 if isinstance(pkg, dict) and "name" in pkg:
                     locked_pkgs.add(pkg["name"].lower())
         except Exception as e:
-            print(f"⚠️ Failed to parse uv.lock: {e}")
+            print(f"[WARN] Failed to parse uv.lock: {e}")
 
     # --- 5) Add any filtered (kept) packages missing from uv.lock ---
 
@@ -109,7 +109,7 @@ def create_requirements_txt(
         if missing_from_lock:
             env = os.environ.copy()
             env["UV_LINK_MODE"] = "copy"
-            print(f"🔄 Adding missing packages to uv.lock: {missing_from_lock}")
+            print(f"[INFO] Adding missing packages to uv.lock: {missing_from_lock}")
             for pkg in missing_from_lock:
                 try:
                     subprocess.run(
@@ -120,7 +120,7 @@ def create_requirements_txt(
                         stderr=subprocess.DEVNULL,
                     )
                 except subprocess.CalledProcessError as e:
-                    print(f"❌ Failed to add {pkg} via uv: {e}")
+                    print(f"[ERROR] Failed to add {pkg} via uv: {e}")
 
 
 def create_conda_environment_yml(
@@ -144,7 +144,7 @@ def create_conda_environment_yml(
     output_path = (PROJECT_ROOT / pathlib.Path(output_file)).resolve()
 
     if not requirements_path.exists():
-        raise FileNotFoundError(f"Requirements file not found: {requirements_path}")
+        raise FileNotFoundError(f"[ERROR] Requirements file not found: {requirements_path}")
 
     # Python pin: prefer major.minor (easier to solve across channels)
     py_out = subprocess.check_output([sys.executable, "--version"]).decode().strip()
@@ -166,7 +166,7 @@ def create_conda_environment_yml(
         if m:
             conda_deps.append(f"r-base={m.group(1)}")
         else:
-            print(f"⚠️  Could not parse R version from: {r_version} (skipping r-base pin)")
+            print(f"[WARN] Could not parse R version from: {r_version} (skipping r-base pin)")
 
     # Add pip sublist
     conda_deps.append({"pip": pip_deps})
@@ -182,7 +182,7 @@ def create_conda_environment_yml(
     with open(output_path, "w", encoding="utf-8") as f:
         yaml.safe_dump(env, f, sort_keys=False)
 
-    print(f"✅ Conda environment file created: {output_path}")
+    print(f"[INFO] Conda environment file created: {output_path}")
 
 
 def tag_env_file(env_file: str = "environment.yml"):
@@ -191,7 +191,7 @@ def tag_env_file(env_file: str = "environment.yml"):
     env_path = root / env_file
 
     if not env_path.exists():
-        print(f"❌ {env_file} not found.")
+        print(f"[ERROR] {env_file} not found.")
         return
 
     raw_rules = read_toml(
@@ -202,7 +202,7 @@ def tag_env_file(env_file: str = "environment.yml"):
     )
 
     if not raw_rules:
-        print("ℹ️ No platform rules found. Skipping tagging.")
+        print("[INFO] No platform rules found. Skipping tagging.")
         return
 
     sys_to_conda = {"win32": "win", "darwin": "osx", "linux": "linux"}
@@ -248,7 +248,7 @@ def tag_env_file(env_file: str = "environment.yml"):
     with open(env_path, "w", encoding="utf-8") as f:
         f.writelines(updated_lines)
 
-    print(f"✅ Updated {env_file} with Conda-style platform tags")
+    print(f"[INFO] Updated {env_file} with Conda-style platform tags")
 
 
 def tag_requirements_txt(requirements_file: str = "requirements.txt"):
@@ -264,11 +264,11 @@ def tag_requirements_txt(requirements_file: str = "requirements.txt"):
     )
 
     if not platform_rules:
-        print("ℹ️ No platform rules found. Skipping tagging.")
+        print("[INFO] No platform rules found. Skipping tagging.")
         return
 
     if not requirements_path.exists():
-        raise FileNotFoundError(f"❌ Requirements file not found: {requirements_path}")
+        raise FileNotFoundError(f"[ERROR] Requirements file not found: {requirements_path}")
 
     # Read the requirements.txt
     with open(requirements_path, encoding="utf-8") as f:
@@ -291,7 +291,7 @@ def tag_requirements_txt(requirements_file: str = "requirements.txt"):
     with open(requirements_path, "w", encoding="utf-8") as f:
         f.write("\n".join(filtered_lines) + "\n")
 
-    print(f"✅ requirements.txt updated with platform tags: {requirements_path}")
+    print(f"[INFO] requirements.txt updated with platform tags: {requirements_path}")
 
 
 def resolve_parent_module(module_name):
@@ -525,3 +525,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(lock_all_packages=args.lock_all_packages)
+

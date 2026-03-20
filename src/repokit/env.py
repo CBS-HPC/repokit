@@ -1,4 +1,4 @@
-import os
+﻿import os
 import pathlib
 import platform
 import shutil
@@ -256,7 +256,7 @@ def install_miniconda(install_path):
         # Override to C:\Users\<username>\miniconda3
         user_home = pathlib.Path.home()
         install_path = str(user_home / "miniconda3")
-        print(f"Windows detected — overriding install path to: {install_path}")
+        print(f"Windows detected - overriding install path to: {install_path}")
 
         download_dir = os.path.dirname(install_path)
         if not os.path.exists(download_dir):
@@ -367,7 +367,7 @@ def install_miniforge(install_path):
         # Override to C:\Users\<username>\miniforge3
         user_home = pathlib.Path.home()
         install_path = str(user_home / "miniforge3")
-        print(f"Windows detected — overriding install path to: {install_path}")
+        print(f"Windows detected - overriding install path to: {install_path}")
 
         download_dir = os.path.dirname(install_path)
         if not os.path.exists(download_dir):
@@ -605,22 +605,23 @@ def create_venv_env():
             env = os.environ.copy()
             env["UV_LINK_MODE"] = "copy"
             subprocess.run([sys.executable, "-m", "uv", "venv", str(env_path)], check=True, env=env)
-            print(f'✅ Virtual environment created at "{env_path}" using uv.')
+            print(f'[INFO] Virtual environment created at "{env_path}" using uv.')
             used_uv = True
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("⚠️ uv failed to create the virtual environment. Falling back to venv.")
+            print("[WARN] uv failed to create the virtual environment. Falling back to venv.")
 
     if not used_uv:
         try:
             subprocess.run([sys.executable, "-m", "venv", str(env_path)], check=True)
-            print(f'✅ Virtual environment created at "{env_path}" using venv.')
+            print(f'[INFO] Virtual environment created at "{env_path}" using venv.')
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to create virtual environment using venv: {e}")
+            print(f"[ERROR] Failed to create virtual environment using venv: {e}")
             return None
         except Exception as e:
-            print(f"❌ Unexpected error while creating the virtual environment: {e}")
+            print(f"[ERROR] Unexpected error while creating the virtual environment: {e}")
             return None
 
     save_to_env(str(env_path), "VENV_ENV_PATH")
 
     return str(env_path)
+
