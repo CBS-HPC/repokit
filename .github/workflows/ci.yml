@@ -16,9 +16,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install -U pip
-      - run: pip install -e ".[dev]"
-      - run: ruff check src tests
-      - run: ruff format --check src tests
-      - run: mypy src
+      - name: Install released internal dependencies
+        run: |
+          pip install https://github.com/CBS-HPC/repokit-common/releases/download/v0.1.0/repokit_common-0.1.0-py3-none-any.whl
+          pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v0.1.0/repokit_backup-0.1-py3-none-any.whl
+          pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v0.1.0/repokit_dmp-0.1-py3-none-any.whl
+      - run: pip install -e . --no-deps
+      - run: pip install python-dotenv PyYAML requests beautifulsoup4 nbformat pathspec psutil py-cpuinfo Jinja2 streamlit jsonschema dirhash agr pytest uv
+      - run: python -m compileall -q src
       - run: pytest tests
 

@@ -11,22 +11,20 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 
 ## Installation
 
-`repokit` is not published on PyPI yet. Use local wheel/source installation.
-
-Install from local wheel files (`/dist`):
+`repokit` is not published on PyPI. Install immutable GitHub Release assets in dependency order:
 
 ```bash
-# 1) Install dependency wheels first
-pip install https://github.com/CBS-HPC/repokit-common/raw/main/dist/repokit_common-0.1-py3-none-any.whl
-pip install https://github.com/CBS-HPC/repokit-backup/raw/main/dist/repokit_backup-0.1-py3-none-any.whl
-pip install https://github.com/CBS-HPC/repokit-dmp/raw/main/dist/repokit_dmp-0.1-py3-none-any.whl
+# 1) Install internal dependency wheels first
+pip install https://github.com/CBS-HPC/repokit-common/releases/download/v0.1.0/repokit_common-0.1.0-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v0.1.0/repokit_backup-0.1-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v0.1.0/repokit_dmp-0.1-py3-none-any.whl
 
-# 2) Install repokit wheel
-pip install https://github.com/CBS-HPC/repokit/raw/main/dist/repokit-0.1-py3-none-any.whl
+# 2) Install repokit and its public runtime dependencies
+pip install https://github.com/CBS-HPC/repokit/releases/download/v0.1.0/repokit-0.1-py3-none-any.whl --no-deps
+pip install python-dotenv PyYAML requests beautifulsoup4 nbformat pathspec psutil py-cpuinfo Jinja2 streamlit jsonschema dirhash agr
 ```
 
-If you are installing into a fresh virtual environment, install in this order so local dependencies are available before `repokit`.
-Wheel filenames include version tags and may change over time.
+Use Python 3.10 or later. Verify downloaded files against the `SHA256SUMS` files attached to their releases.
 
 From source:
 

@@ -87,6 +87,13 @@ repokit = [
   "templates/**/*.json",
 ]
 
+[tool.setuptools.exclude-package-data]
+"*" = [
+  "__pycache__/*",
+  "*.pyc",
+  "*.pyo",
+]
+
 
 [tool.ruff]
 line-length = 100
