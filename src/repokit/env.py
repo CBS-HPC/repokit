@@ -7,11 +7,6 @@ import sys
 import urllib.request
 import yaml
 
-# Allow loading repokit_common from the submodule path before installation.
-_EXT_COMMON = pathlib.Path(__file__).resolve().parents[2] / "external" / "repokit-common" / "src"
-if _EXT_COMMON.exists():
-    sys.path.insert(0, str(_EXT_COMMON))
-
 try:
     from .conda import export_conda_env, set_conda_packages
     from repokit_common import (
@@ -24,8 +19,7 @@ try:
     )
 except Exception as exc:
     raise RuntimeError(
-        "repokit_common could not be imported. Ensure the submodule is "
-        "initialized or the package is installed."
+        "repokit_common could not be imported. Install the declared dependency first."
     ) from exc
 
 

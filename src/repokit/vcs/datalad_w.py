@@ -10,7 +10,7 @@ from repokit_common import (
     exe_to_path,
     is_installed,
     install_uv,
-    _run,
+    run_command as _run,
     toml_dataset_path,
 )
 

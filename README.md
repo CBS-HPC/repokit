@@ -14,14 +14,14 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 `repokit` is not published on PyPI. Install immutable GitHub Release assets in dependency order:
 
 ```bash
-# 1) Install internal dependency wheels first
-pip install https://github.com/CBS-HPC/repokit-common/releases/download/v0.1.0/repokit_common-0.1.0-py3-none-any.whl
+# 1) Install compatible internal dependency wheels first
+pip install https://github.com/CBS-HPC/repokit-common/releases/download/v1.0.0/repokit_common-1.0.0-py3-none-any.whl
 pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v0.1.0/repokit_backup-0.1-py3-none-any.whl
-pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v0.1.0/repokit_dmp-0.1-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v1.0.0/repokit_dmp-1.0.0-py3-none-any.whl
 
 # 2) Install repokit and its public runtime dependencies
-pip install https://github.com/CBS-HPC/repokit/releases/download/v0.1.0/repokit-0.1-py3-none-any.whl --no-deps
-pip install python-dotenv PyYAML requests beautifulsoup4 nbformat pathspec psutil py-cpuinfo Jinja2 streamlit jsonschema dirhash agr
+pip install https://github.com/CBS-HPC/repokit/releases/download/v1.0.0/repokit-1.0.0-py3-none-any.whl --no-deps
+pip install python-dotenv PyYAML requests beautifulsoup4 nbformat pathspec psutil py-cpuinfo Jinja2 streamlit jsonschema dirhash agr toml
 ```
 
 Use Python 3.10 or later. Verify downloaded files against the `SHA256SUMS` files attached to their releases.
