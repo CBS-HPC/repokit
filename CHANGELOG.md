@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 2026-08-14
+
+- Allow `repokit-backup` releases from 0.1.0 through 1.0.0 inclusive and validate against 1.0.0.
+
 ## 1.0.0 - 2026-08-13
 
 - Added a supported release workflow with immutable wheel, source archive, and checksum assets.

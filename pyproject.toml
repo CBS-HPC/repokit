@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "repokit"
-version = "1.0.0"
+version = "1.0.1"
 description = "Repokit core CLI for research automation"
 readme = "README.md"
 license = "MIT"
@@ -34,7 +34,7 @@ dependencies = [
   "dirhash",
   "agr",
   "repokit-common>=1,<2",
-  "repokit-backup>=0.1,<1",
+  "repokit-backup>=0.1.0,<=1.0.0",
   "repokit-dmp>=1,<2",
 
   # TOML read/write split:

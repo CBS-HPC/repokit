@@ -16,11 +16,11 @@ Core utilities for the Research Template setup flow. `repokit` provides reusable
 ```bash
 # 1) Install compatible internal dependency wheels first
 pip install https://github.com/CBS-HPC/repokit-common/releases/download/v1.0.0/repokit_common-1.0.0-py3-none-any.whl
-pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v0.1.0/repokit_backup-0.1-py3-none-any.whl
+pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v1.0.0/repokit_backup-1.0.0-py3-none-any.whl
 pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v1.0.0/repokit_dmp-1.0.0-py3-none-any.whl
 
 # 2) Install repokit and its public runtime dependencies
-pip install https://github.com/CBS-HPC/repokit/releases/download/v1.0.0/repokit-1.0.0-py3-none-any.whl --no-deps
+pip install https://github.com/CBS-HPC/repokit/releases/download/v1.0.1/repokit-1.0.1-py3-none-any.whl --no-deps
 pip install python-dotenv PyYAML requests beautifulsoup4 nbformat pathspec psutil py-cpuinfo Jinja2 streamlit jsonschema dirhash agr toml
 ```
 

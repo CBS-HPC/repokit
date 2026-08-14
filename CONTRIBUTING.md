@@ -6,7 +6,7 @@ Use Python 3.10 or later. Install the compatible internal wheels, then install t
 
 ```bash
 python -m pip install https://github.com/CBS-HPC/repokit-common/releases/download/v1.0.0/repokit_common-1.0.0-py3-none-any.whl
-python -m pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v0.1.0/repokit_backup-0.1-py3-none-any.whl
+python -m pip install https://github.com/CBS-HPC/repokit-backup/releases/download/v1.0.0/repokit_backup-1.0.0-py3-none-any.whl
 python -m pip install https://github.com/CBS-HPC/repokit-dmp/releases/download/v1.0.0/repokit_dmp-1.0.0-py3-none-any.whl
 python -m pip install -e ".[dev]" --no-deps
 ```
